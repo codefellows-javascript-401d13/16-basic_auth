@@ -2,11 +2,11 @@
 ======
 After cloning down the repository, in the root directory run:
 
-```
+```sh
 $ node setup
 ```
 Then, in the newly created directory `.env` copy and paste these values inside of the empty quotes:
-```
+```sh
 mongodb://localhost/cfgram
 letTheRightOneIn
 ```
