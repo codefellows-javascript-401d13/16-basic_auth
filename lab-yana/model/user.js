@@ -10,8 +10,8 @@ const Promise = require('bluebird');
 
 const Schema = mongoose.Schema;
 
-const userSchema = new Schema({
-  username: { type: String, unique: true, required: true },
+const userSchema = Schema({
+  username: { type: String, required: true, unique: true  },
   password: { type: String, required: true },
   email: { type: String, unique: true, required: true },
   findHash: { type: String, unique: true }
@@ -43,7 +43,7 @@ userSchema.methods.generateFindHash = function() {
   debug('generateFindHash');
   return new Promise((resolve, reject) => {
     let tries = 0;
-    _generateFindHash();
+    _generateFindHash.call(this);
     function _generateFindHash() {
       this.findHash = crypto.randomBytes(32).toString('hex'); //assign to findHash a randomly generated hash for two step authentication
       this.save() //make sure to save it in db

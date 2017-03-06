@@ -8,7 +8,7 @@ const express = require('express');
 const authRouter = require('./route/auth-routes.js');
 const errors = require('./lib/error-middleware.js');
 const dotenv = require('dotenv');
-const PORT = process.env.PORT || 3004;
+const PORT = 3003;
 
 dotenv.load(); //use the variables in the .env file;
 

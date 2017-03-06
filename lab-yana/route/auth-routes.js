@@ -5,6 +5,7 @@ const parseJSON = require('body-parser').json();
 const Router = require('express').Router;
 const basicAuth = require('../lib/basic-auth-middleware.js');
 const User = require('../model/user.js');
+const createError = require('http-errors');
 
 const authRouter = module.exports = Router();
 
@@ -18,7 +19,9 @@ authRouter.post('/api/signup', parseJSON, function(req, res, next) {
   .then(user => user.save()) //save new user info to db
   .then(user => user.generateToken()) //generate a new auth token
   .then(token => res.send(token)) //send auth token to user
-  .catch(next);
+  .catch(err => {
+    next(createError(400, err.message));
+  });
 });
 
 authRouter.get('/api/signin', basicAuth, function(req, res, next) {
