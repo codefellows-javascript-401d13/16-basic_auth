@@ -1,0 +1,24 @@
+{
+  "name": "16-basic_auth",
+  "version": "1.0.0",
+  "description": "![cf](https://i.imgur.com/7v5ASc8.png) Lab 16 - Basic Auth ======",
+  "main": "gulpfile.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "DEBUG='cfgram*' mocha",
+    "start": "DEBUG='cfgram*' node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/caylazabel/16-basic_auth.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/caylazabel/16-basic_auth/issues"
+  },
+  "homepage": "https://github.com/caylazabel/16-basic_auth#readme"
+}
