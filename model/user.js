@@ -49,7 +49,7 @@ userSchema.methods.comparePasswordHash = function(password) {
   });
 };
 
-userSchema.generateFindHash = function() {
+userSchema.methods.generateFindHash = function() {
   debug('generateFindHash');
 
   return new Promise((resolve, reject) => {
