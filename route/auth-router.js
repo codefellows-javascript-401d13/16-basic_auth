@@ -27,7 +27,7 @@ authRouter.post('/api/signup', jsonParser, function(req, res, next) {
 
 authRouter.get('/api/signin', basicAuth, function(req, res, next) {
   debug('GET: /api/signin');
-  console.log('username:', req.auth.username);
+
   User.findOne({ username: req.auth.username })
   .then( user => {
     if (!user) return next(createError(401, 'username not found'));
