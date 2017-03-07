@@ -9,7 +9,7 @@ module.exports = function(req, res, next) {
   debug('bearer-auth-middleware');
 
   let authHeader = req.headers.authorization;
-  if (!authHeader) return next(createError(401, 'authorization header required'))
+  if (!authHeader) return next(createError(401, 'authorization header required'));
 
   let token = authHeader.split('Bearer ')[1];
   if(!token) return next(createError(401, 'token required'));

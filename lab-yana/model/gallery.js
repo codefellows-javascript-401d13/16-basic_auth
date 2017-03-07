@@ -1,8 +1,6 @@
 'use strict';
 
-const debug = require('debug')('cfgram:gallery');
 const mongoose = require('mongoose');
-const Promise = require('bluebird');
 const Schema = mongoose.schema;
 
 const gallerySchema = Schema({
