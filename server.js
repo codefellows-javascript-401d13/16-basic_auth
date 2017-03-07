@@ -10,20 +10,20 @@ const cors = require('cors');
 
 const authRouter = require('./route/auth-router.js');
 const errors = require('./lib/error-middleware.js');
-
+debug('step 1');
 dotenv.load();
 
 const PORT = process.env.PORT;
-// const MONGODB_URI = process.env.MONGODB_URI;
 
 const app = express();
 
-// mongoose.connect(process.env.MONGODB_URI);
+mongoose.Promise = Promise;
+mongoose.connect(process.env.MONGODB_URI);
 
-// app.use(cors());
-// app.use(morgan('dev'));
-// app.use(authRouter);
-// app.use(errors);
+app.use(cors());
+app.use(morgan('dev'));
+app.use(authRouter);
+app.use(errors);
 
 app.listen(PORT, () => {
   debug(`server running on : ${PORT}`);

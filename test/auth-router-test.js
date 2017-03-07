@@ -11,7 +11,7 @@ mongoose.Promise = Promise;
 
 require('../server.js');
 
-const url = 'http://localhost:${process.env.PORT}';
+const url = `http://localhost:${process.env.PORT}`;
 
 const exampleUser = {
   username: 'exampleUser',
@@ -27,14 +27,16 @@ describe('Authorization Routes', function() {
         .then( () => done())
         .catch(done);
       });
-
+      debug('step 2');
       it('should return a token', done => {
         request.post(`${url}/api/signup`)
         .send(exampleUser)
         .end((err, res) => {
           if(err) return done(err);
+          debug('step 3')
           expect(res.status).to.equal(200);
           expect(res.text).to.be.a('string');
+          done();
         });
       });
     });
