@@ -6,23 +6,23 @@ const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 const createError = require('http-errors');
 const Promise = require('bluebird');
-const debug = require('debug')('glgram:user');
+const debug = require('debug')('cfgram:user');
 
 const Schema = mongoose.Schema;
 
 const userSchema = Schema({
-  username: {type: String, required: true, uniquie: true},
-  email: {type: String, required: true, unique: true},
-  password: {type: String, required: true},
-  findHash: {type: String, unique: true}
+  username: { type: String, required: true, unique: true },
+  email: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
+  findHash: { type: String, unique: true }
 });
 
 userSchema.methods.generatePasswordHash = function(password) {
   debug('generatePasswordHash');
 
-  return new Promise((resolve, reject)=> {
+  return new Promise((resolve, reject) => {
     bcrypt.hash(password, 10, (err, hash) => {
-      if(err) return reject(err);
+      if (err) return reject(err);
       this.password = hash;
       resolve(this);
     });
@@ -34,8 +34,8 @@ userSchema.methods.comparePasswordHash = function(password) {
 
   return new Promise((resolve, reject) => {
     bcrypt.compare(password, this.password, (err, valid) => {
-      if(err) return reject(err);
-      if(!valid) return reject(createError(401, 'wrong passord'));
+      if (err) return reject(err);
+      if (!valid) return reject(createError(401, 'wrong password'));
       resolve(this);
     });
   });
@@ -48,13 +48,13 @@ userSchema.methods.generateFindHash = function() {
     let tries = 0;
 
     _generateFindHash.call(this);
-
+    
     function _generateFindHash() {
       this.findHash = crypto.randomBytes(32).toString('hex');
       this.save()
       .then(() => resolve(this.findHash))
       .catch( err => {
-        if(tries > 3) return reject(err);
+        if (tries > 3) return reject(err);
         tries++;
         _generateFindHash.call(this);
       });
@@ -67,7 +67,7 @@ userSchema.methods.generateToken = function() {
 
   return new Promise((resolve, reject) => {
     this.generateFindHash()
-    .then(findHash => resolve(jwt.sign({token: findHash}, process.env.APP_SECRET)))
+    .then(findHash => resolve(jwt.sign({ token: findHash }, process.env.APP_SECRET)))
     .catch( err => reject(err));
   });
 };

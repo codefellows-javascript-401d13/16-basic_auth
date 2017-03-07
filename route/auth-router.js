@@ -1,14 +1,14 @@
 'use strict';
 
 const jsonParser = require('body-parser').json();
-const debug = require('debug')('glgram:auth-router');
+const debug = require('debug')('cfgram:auth-router');
 const Router = require('express').Router;
 const basicAuth = require('../lib/basic-auth-middleware.js');
 
 const User = require('../model/user.js');
 
 const authRouter = module.exports = Router();
-// debug('step 4');
+
 authRouter.post('/api/signup', jsonParser, function(req, res, next) {
   debug('POST /api/signup');
 
@@ -25,7 +25,7 @@ authRouter.post('/api/signup', jsonParser, function(req, res, next) {
 });
 
 authRouter.get('/api/signin', basicAuth, function(req, res, next) {
-  debug('GET: /api/signin');
+  debug('GET /api/signin');
 
   User.findOne({ username: req.auth.username })
   .then( user => user.comparePasswordHash(req.auth.password))
@@ -33,3 +33,4 @@ authRouter.get('/api/signin', basicAuth, function(req, res, next) {
   .then( token => res.send(token))
   .catch(next);
 });
+

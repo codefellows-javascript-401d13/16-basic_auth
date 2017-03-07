@@ -18,7 +18,7 @@ const exampleUser = {
   email: 'exampleuser@test.com'
 };
 
-describe.only('Auth Routes', function() {
+describe('Auth Routes', function() {
   describe('POST: /api/signup', function() {
     describe('with a valid body', function() {
       after( done => {
@@ -37,6 +37,18 @@ describe.only('Auth Routes', function() {
           expect(res.text).to.be.a('string');
           done();
         });
+      });
+    });
+  });
+
+  describe('with an invalid body', function() {
+    it('should return a 400 for a bad request', (done) => {
+      request.post(`${url}/api/signup`)
+      .send('nothing here')
+      .set('Content-Type', 'application/json')
+      .end((err, res) => {
+        expect(res.status).to.equal(400);
+        done();
       });
     });
   });
@@ -65,10 +77,19 @@ describe.only('Auth Routes', function() {
         .auth('exampleuser', '1234')
         .end((err, res) => {
           if (err) return done(err);
-          console.log('\nuser:', this.tempUser);
-          console.log('\ntoken:', res.text);
           expect(res.status).to.equal(200);
           done();
+        });
+      });
+
+      describe('without a valid auth', function() {
+        it('should return a 401 error', done => {
+          request.get(`${url}/api/signin`)
+          .auth('test user', 'wrong pwrd')
+          .end((err, res) => {
+            expect(res.status).to.equal(401);
+            done();
+          });
         });
       });
     });
