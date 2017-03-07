@@ -1,6 +1,7 @@
 'use strict';
 
 const debug = require('debug')('ayogram:auth-router');
+const createError = require('http-errors');
 const jsonParser = require('body-parser').json();
 
 const basicAuth = require('../lib/basic-auth-middleware.js');
@@ -10,6 +11,10 @@ const authRouter = module.exports  = require('express').Router();
 
 authRouter.post('/api/signup', jsonParser, function(req, res, next) {
   debug('POST: /api/signup');
+
+  if(!req.body.username) return next(createError(400, 'username required'));
+  if(!req.body.email) return next(createError(400, 'email required'));
+  if(!req.body.password) return next(createError(400, 'password required'));
 
   let password = req.body.password;
   delete req.body.password;

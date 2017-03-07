@@ -16,12 +16,17 @@ const exampleUser = {
 
 describe('Auth Routes', function() {
   describe('POST: /api/signup', function() {
+    afterEach( done => {
+      User.remove({})
+      .then( () => done())
+      .catch(done);
+    });
     describe('with a valid body', function() {
-      after( done => {
-        User.remove({})
-        .then( () => done())
-        .catch(done);
-      });
+      // after( done => {
+      //   User.remove({})
+      //   .then( () => done())
+      //   .catch(done);
+      // });
 
       it('should return a token', done => {
         request.post(`${url}/api/signup`)
@@ -30,6 +35,18 @@ describe('Auth Routes', function() {
           if (err) done(err);
           expect(res.status).to.equal(200);
           expect(res.text).to.be.a('string');
+          done();
+        });
+      });
+    });
+
+    describe('with an invalid body', function() {
+      it('should respond with a 400 error', done => {
+        request.post(`${url}/api/signup`)
+        .send('invalid body')
+        .end((err, res) => {
+          expect(err).to.be.an('error');
+          expect(res.status).to.equal(400);
           done();
         });
       });
