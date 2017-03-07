@@ -44,7 +44,7 @@ userSchema.methods.comparePasswordHash = function(password) {
 userSchema.methods.generateFindHash = function() {
   debug('generateFindHash');
 
-  return new Pomise( (resolve, reject) => {
+  return new Promise( (resolve, reject) => {
     let tries = 0;
 
     _generateFindHash.call(this);

@@ -27,8 +27,9 @@ authRouter.post('/api/signup', jsonParser, function(req, res, next) {
 authRouter.get('/api/signin', basicAuth, function(req, res, next) {
   debug('GET /api/signin');
 
+
   User.findOne({ username: req.auth.username })
-  then( user => user.comparePasswordHash(req.auth.password) )
+  .then( user => user.comparePasswordHash(req.auth.password) )
   .then( user => user.generateToken() )
   .then( token => res.send(token) )
   .catch(next);

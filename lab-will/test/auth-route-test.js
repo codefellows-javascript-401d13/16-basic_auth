@@ -15,7 +15,7 @@ const url = `http://localhost:${process.env.PORT}`;
 const exampleUser = {
   username: 'exampleuser',
   password: '1234',
-  email: 'exampleuser@test.com')
+  email: 'exampleuser@test.com'
 };
 
 describe('Auth Routes', function() {
