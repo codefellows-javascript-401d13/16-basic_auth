@@ -18,7 +18,6 @@ describe('Auth Routes', function() {
   describe('POST: /api/signup', function() {
     describe('with a valid body', function() {
       after( done => {
-        if (!this.tempUser) done();
         User.remove({})
         .then( () => done())
         .catch(done);
@@ -31,6 +30,37 @@ describe('Auth Routes', function() {
           if (err) done(err);
           expect(res.status).to.equal(200);
           expect(res.text).to.be.a('string');
+          done();
+        });
+      });
+    });
+  });
+
+  describe('GET: /api/signin', function() {
+    describe('with valid user auth header', function() {
+      before( done => {
+        let user = new User(exampleUser);
+        user.generatePasswordHash(exampleUser.password)
+        .then( user => user.save())
+        .then( user => {
+          this.tempUser = user;
+          done();
+        })
+        .catch(done);
+      });
+
+      after( done => {
+        User.remove({})
+        .then( () => done())
+        .catch(done);
+      });
+
+      it('should return a token', done => {
+        request.get(`${url}/api/signin`)
+        .auth('exampleuser', 'pa55word')
+        .end((err, res) => {
+          if (err) done(err);
+          expect(res.status).to.equal(200);
           done();
         });
       });
