@@ -5,7 +5,7 @@ const request = require('superagent');
 const mongoose = require('mongoose');
 const Promise = require('bluebird');
 const User = require('../model/user.js');
-const debug = require('debug')('cfgram:basic-auth-route-test')
+const debug = require('debug')('cfgram:basic-auth-route-test');
 
 mongoose.Promise = Promise;
 
@@ -84,6 +84,10 @@ describe('Auth Routes', function() {
         });
         it('should return a 400', done => {
           request.post(`${url}/api/signup`)
+          .send({
+            username: 'brian',
+            password: 'awesome'
+          })
           .end((err, res) => {
             expect(res.status).to.equal(400);
             done();
