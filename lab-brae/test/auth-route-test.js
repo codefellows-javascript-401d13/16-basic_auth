@@ -39,6 +39,18 @@ describe('Auth Routes', function() {
                 });
             });
         });
+        
+        describe('with an invalid body', function() {
+            it('should return a 400 error', done => {
+                request.post(`${url}/api/signup`)
+                .send({ username: 'nousername', password: 'nopassword'})
+                .end((err, res) => {
+                    expect(err).to.be.an('error');
+                    expect(res.status).to.equal(400);
+                    done();
+                });
+            });
+        });
     });
 
     describe('GET: /api/signin', function() {
@@ -70,6 +82,27 @@ describe('Auth Routes', function() {
                     expect(res.status).to.equal(200);
                     done();
                 });
+            });
+
+            describe('with an bad password', function() {
+                it('should return a 401 error', done => {
+                    request.get(`${url}/api/signin`)
+                    .auth('exampleuser', 'incorrectpassword')
+                    .end((err, res) => {
+                        expect(res.status).to.equal(401);
+                        done();
+                    });
+                });
+            });
+        });
+    });
+
+    describe('with an invalid path', function() {
+        it('should return a 400 error', done => {
+            request.get(`${url}/api/nopath`)
+            .end((err, res) => {
+                expect(res.status).to.equal(404);
+                done();
             });
         });
     });
