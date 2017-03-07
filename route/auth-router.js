@@ -4,6 +4,7 @@ const debug = require('debug')('cfgram:auth-router');
 const jsonParser = require('body-parser').json();
 const Router = require('express').Router;
 const basicAuth = require('../lib/basic-auth-middleware.js');
+const createError = require('http-errors');
 
 const User = require('../model/user.js');
 
@@ -26,9 +27,12 @@ authRouter.post('/api/signup', jsonParser, function(req, res, next) {
 
 authRouter.get('/api/signin', basicAuth, function(req, res, next) {
   debug('GET: /api/signin');
-
+  console.log('username:', req.auth.username);
   User.findOne({ username: req.auth.username })
-  .then( user => user.comparePasswordHash(req.auth.password))
+  .then( user => {
+    if (!user) return next(createError(401, 'username not found'));
+    return user.comparePasswordHash(req.auth.password);
+  })
   .then( user => user.generateToken())
   .then( token => res.send(token))
   .catch(next);
