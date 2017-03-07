@@ -38,6 +38,18 @@ describe('Auth Routes', function() {
     });
   });
 
+  describe('with invalid body', function(){
+    it('should return a 400 for bad request', (done) => {
+      request.post(`${url}/api/signup`)
+      .send('hi')
+      .set('Content-Type', 'application/json')
+      .end((err, res) => {
+        expect(res.status).to.equal(400);
+        done();
+      });
+    });
+  });
+
   describe('GET: /api/signin', function() {
     describe('with a valid body', function() {
       before ( done => {
@@ -66,6 +78,17 @@ describe('Auth Routes', function() {
           console.log('GET: /api/signin token', res.text);
           expect(res.status).to.equal(200);
           done();
+        });
+      });
+
+      describe('without a valid authenication', function ()  {
+        it('should return a 401 error', done => {
+          request.get(`${url}/api/signin`)
+          .auth('test user', 'wrong password')
+          .end(err => {
+            expect(err.status).to.equal(401);
+            done();
+          });
         });
       });
     });

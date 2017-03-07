@@ -20,5 +20,22 @@
   "bugs": {
     "url": "https://github.com/caylazabel/16-basic_auth/issues"
   },
-  "homepage": "https://github.com/caylazabel/16-basic_auth#readme"
+  "homepage": "https://github.com/caylazabel/16-basic_auth#readme",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.2.0",
+    "superagent": "^3.5.0"
+  },
+  "dependencies": {
+    "bcrypt": "^1.0.2",
+    "bluebird": "^3.5.0",
+    "body-parser": "^1.17.1",
+    "cors": "^2.8.1",
+    "debug": "^2.6.1",
+    "dotenv": "^4.0.0",
+    "http-errors": "^1.6.1",
+    "jsonwebtoken": "^7.3.0",
+    "mongoose": "^4.8.6",
+    "morgan": "^1.8.1"
+  }
 }
