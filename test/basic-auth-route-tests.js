@@ -118,12 +118,38 @@ describe('Auth Routes', function() {
 
       it('should return a token', done => {
         request.get(`${url}/api/signin`)
-        .auth('exampleuser', '1234')
+        .auth('brian', 'awesome')
         .end((err, res) => {
           if (err) return done(err);
           console.log('\nuser:', this.tempUser);
           console.log('\ntoken:', res.text);
           expect(res.status).to.equal(200);
+          done();
+        });
+      });
+    });
+    describe('with an invalid body', function() {
+      before( done => {
+        let user = new User(exampleUser);
+        user.generatePasswordHash(exampleUser.password)
+        .then( user => user.save())
+        .then( user => {
+          this.tempUser = user;
+          done();
+        })
+        .catch(done);
+      });
+
+      after( done => {
+        User.remove({})
+        .then( () => done())
+        .catch(done);
+      });
+
+      it('should return a 401', done => {
+        request.get(`${url}/api/signin`)
+        .end((err, res) => {
+          expect(res.status).to.equal(401);
           done();
         });
       });
