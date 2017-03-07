@@ -22,12 +22,6 @@ describe('Auth Routes', function() {
       .catch(done);
     });
     describe('with a valid body', function() {
-      // after( done => {
-      //   User.remove({})
-      //   .then( () => done())
-      //   .catch(done);
-      // });
-
       it('should return a token', done => {
         request.post(`${url}/api/signup`)
         .send(exampleUser)
@@ -54,24 +48,24 @@ describe('Auth Routes', function() {
   });
 
   describe('GET: /api/signin', function() {
+    beforeEach( done => {
+      let user = new User(exampleUser);
+      user.generatePasswordHash(exampleUser.password)
+      .then( user => user.save())
+      .then( user => {
+        this.tempUser = user;
+        done();
+      })
+      .catch(done);
+    });
+
+    afterEach( done => {
+      User.remove({})
+      .then( () => done())
+      .catch(done);
+    });
+    
     describe('with valid user auth header', function() {
-      before( done => {
-        let user = new User(exampleUser);
-        user.generatePasswordHash(exampleUser.password)
-        .then( user => user.save())
-        .then( user => {
-          this.tempUser = user;
-          done();
-        })
-        .catch(done);
-      });
-
-      after( done => {
-        User.remove({})
-        .then( () => done())
-        .catch(done);
-      });
-
       it('should return a token', done => {
         request.get(`${url}/api/signin`)
         .auth('exampleuser', 'pa55word')
@@ -81,6 +75,19 @@ describe('Auth Routes', function() {
           done();
         });
       });
+    });
+
+    describe('with an invalid password', function() {
+      it('should respond with a 401', done => {
+        request.get(`${url}/api/signin`)
+        .auth('exampleuser', 'wrong password')
+        .end((err, res) => {
+          expect(err).to.be.an('error');
+          expect(res.status).to.equal(401);
+          done();
+        });
+      });
+
     });
   });
 });
