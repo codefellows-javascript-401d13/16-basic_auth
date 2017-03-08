@@ -36,9 +36,15 @@ galleryRouter.get('/api/gallery/:id', bearerAuth, function(req, res, next) {
 galleryRouter.put('/api/gallery/:id', bearerAuth, jsonParser, function(req, res, next) {
   debug('PUT: /api/gallery/:id');
 
-  Gallery.findByIdAndUpdate(req.params.id, req.body, { new: true })
+  Gallery.findById(req.params.id)
   .then( gallery => {
-    if (!gallery) return next(createError(404, 'ID not found'));
+    if (!gallery) return next(createError(404, 'gallery not found'));
+    if (gallery.userID.toString() !== req.user._id.toString()) {
+      return next(createError(401, 'invalid user'));
+    }
+    return Gallery.findByIdAndUpdate(req.params.id, req.body, { new: true });
+  })
+  .then( gallery => {
     let reqKeys = Object.keys(req.body);
     if (!gallery[reqKeys]) return next(createError(400, 'bad request'));
     res.json(gallery);
@@ -49,7 +55,14 @@ galleryRouter.put('/api/gallery/:id', bearerAuth, jsonParser, function(req, res,
 galleryRouter.delete('/api/gallery/:id', bearerAuth, function(req, res, next) {
   debug('DELETE: /api/galler/:id');
 
-  Gallery.findByIdAndRemove(req.params.id)
+  Gallery.findById(req.params.id)
+  .then( gallery => {
+    if (!gallery) return next(createError(404, 'gallery not found'));
+    if (gallery.userID.toString() !== req.user._id.toString()) {
+      return next(createError(401, 'invalid user'));
+    }
+    return Gallery.findByIdAndRemove(req.params.id);
+  })
   .then( removed => {
     if (!removed) return next(createError(404, 'gallery not found'));
     return next(res.status(204).send('gallery removed'));
