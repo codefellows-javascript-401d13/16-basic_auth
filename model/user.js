@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 const createError = require('http-errors');
 const Promise = require('bluebird');
-const debug = require('debug')('cfgram:user');
+const debug = require('debug')('glgram:user');
 
 const Schema = mongoose.Schema;
 
@@ -48,7 +48,7 @@ userSchema.methods.generateFindHash = function() {
     let tries = 0;
 
     _generateFindHash.call(this);
-    
+
     function _generateFindHash() {
       this.findHash = crypto.randomBytes(32).toString('hex');
       this.save()

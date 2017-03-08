@@ -9,6 +9,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 
 const authRouter = require('./route/auth-router.js');
+const galleryRouter = require('./route/gallery-router.js');
 const errors = require('./lib/error-middleware.js');
 debug('step 1');
 dotenv.load();
@@ -23,6 +24,7 @@ mongoose.connect(process.env.MONGODB_URI);
 app.use(cors());
 app.use(morgan('dev'));
 app.use(authRouter);
+app.use(galleryRouter);
 app.use(errors);
 
 app.listen(PORT, () => {

@@ -82,12 +82,12 @@ describe('Auth Routes', function() {
         });
       });
 
-      describe('without a valid auth', function() {
+      describe('without a valid auth', () => {
         it('should return a 401 error', done => {
           request.get(`${url}/api/signin`)
-          .auth('test user', 'wrong pwrd')
-          .end((err, res) => {
-            expect(res.status).to.equal(401);
+          .auth('exampleuser', 'wrong pwrd')
+          .end((err) => {
+            expect(err.status).to.equal(401);
             done();
           });
         });

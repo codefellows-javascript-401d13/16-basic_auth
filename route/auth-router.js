@@ -1,7 +1,7 @@
 'use strict';
 
 const jsonParser = require('body-parser').json();
-const debug = require('debug')('cfgram:auth-router');
+const debug = require('debug')('glgram:auth-router');
 const Router = require('express').Router;
 const basicAuth = require('../lib/basic-auth-middleware.js');
 
@@ -33,4 +33,3 @@ authRouter.get('/api/signin', basicAuth, function(req, res, next) {
   .then( token => res.send(token))
   .catch(next);
 });
-
