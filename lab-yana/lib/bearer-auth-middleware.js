@@ -8,14 +8,13 @@ const User = require('../model/user.js');
 module.exports = function(req, res, next) {
   debug('bearer-auth-middleware');
 
-  let authHeader = req.headers.authorization;
+  var authHeader = req.headers.authorization;
   if (!authHeader) return next(createError(401, 'authorization header required'));
 
-  let token = authHeader.split('Bearer ')[1];
-  console.log('TOKEN!!!!!!!!!!!', token);
-  if(!token) return next(createError(401, 'token required'));
+  var token = authHeader.split('Bearer ')[1];
+  if (!token) return next(createError(401, 'token required'));
 
-  jwt.verify(token, process.env.APP_SECRET, (err, decoded) => {
+  jwt.verify(token, process.env.APP_SECRET, function(err, decoded) {
     if (err) return next(err);
     User.findOne( { findHash: decoded.token } )
     .then(user => {

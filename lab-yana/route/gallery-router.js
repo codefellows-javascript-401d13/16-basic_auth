@@ -24,14 +24,15 @@ galleryRouter.get('/api/gallery', bearerAuth, function(req, res, next) {
 
   Gallery.find({}, function(err, galleries) {
     if (err) return(next(err));
-    res.json(galleries.select('_id'));
+    var ids = [];
+    galleries.forEach(gallery => ids.push(gallery._id)); //take just the IDs from the returned objects
+    res.json(ids);
   });
 });
 
 galleryRouter.post('/api/gallery', bearerAuth, parseJSON, function(req, res, next) {
   debug('POST: /api/gallery');
-  console.log('BEARERAUTH', bearerAuth);
-
+  // if (req._body === false) return next(createError(400, 'bad request'));
   req.body.userID = req.user._id; //associate the user with the gallery before creating the new gallery and saving it to the db
   new Gallery(req.body).save()
   .then(gallery => res.json(gallery))

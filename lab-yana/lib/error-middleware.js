@@ -21,6 +21,13 @@ module.exports = function(err, req, res, next) {
     return;
   }
 
+  if (err.name === 'CastError') {
+    err = createError(404, err.message);
+    res.status(err.status).send(err.name);
+    next();
+    return;
+  }
+
   err = createError(500, err.message);
   res.status(err.status).send(err.message);
   next();
