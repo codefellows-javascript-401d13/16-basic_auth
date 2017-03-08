@@ -259,6 +259,27 @@ describe('Gallery Routes', function() {
         });
       });
     });
-  });
+    describe('with no token provided', () => {
+      it('should respond with a 401 code', done => {
+        request.get(`${url}/api/gallery/${this.tempGallery._id}`)
+        .end( (err, res) => {
+          expect(res.status).to.equal(401);
+          done();
+        });
+      });
+    });
 
+    describe(' with a valid request with an id that was not found', () => {
+      it('should respond with a 404 code', done => {
+        request.get(`${url}/api/gallery/invalidID`)
+        .set({
+          Authorization: `Bearer ${this.tempToken}`,
+        })
+        .end( (err, res) => {
+          expect(res.status).to.equal(404);
+          done();
+        });
+      });
+    });
+  });
 });
