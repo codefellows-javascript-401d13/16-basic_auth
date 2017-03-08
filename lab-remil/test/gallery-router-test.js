@@ -21,19 +21,14 @@ const exampleGallery = {
 };
 
 describe('Gallery Routes', function() {
-  //////
-  // Setup Hooks for ALL Routes
-  /////
-
-  // Clear User and Gallery before all tests
-  before( () => {
-    return Promise.all([ User.remove({}), Gallery.remove({}) ])
-    .catch(Promise.reject);
+  before( done => {
+    Promise.all([ User.remove({}), Gallery.remove({}) ])
+    .then( () => done())
+    .catch(done);
   });
 
-  // Create a User and token before all tests
-  beforeEach( () => {
-    return new User(exampleUser)
+  beforeEach( done => {
+    new User(exampleUser)
     .generatePasswordHash(exampleUser.password)
     .then( user => user.save())
     .then( user => {
@@ -42,38 +37,27 @@ describe('Gallery Routes', function() {
     })
     .then( token => {
       this.tempToken = token;
-      return Promise.resolve();
+      done();
     })
-    .catch(Promise.reject);
+    .catch(done);
   });
 
-  // Clear User and Gallery after all tests
-  afterEach( () => {
-    return Promise.all([ User.remove({}), Gallery.remove({}) ])
-    .catch(Promise.reject);
+  afterEach( done => {
+    Promise.all([ User.remove({}), Gallery.remove({}) ])
+    .then( () => done())
+    .catch(done);
   });
 
   describe('POST /api/gallery', () => {
-    // beforeEach( () => {
-    //   return new User(exampleUser)
-    //   .generatePasswordHash(exampleUser.password)
-    //   .then( user => user.save())
-    //   .then( user => {
-    //     this.tempUser = user;
-    //     return user.generateToken();
-    //   })
-    //   .then( token => this.tempToken = token)
-    //   .catch(Promise.reject);
-    // });
-
     describe('with a valid body', () => {
-      it('should return a gallery', () => {
-        return request.post(`${url}/api/gallery`)
+      it('should return a gallery', done => {
+        request.post(`${url}/api/gallery`)
         .send(exampleGallery)
         .set({
           Authorization: `Bearer ${this.tempToken}`,
         })
-        .then( res => {
+        .end( (err, res) => {
+          if (err) done(err);
           let date = new Date(res.body.created).toString();
 
           expect(res.status).to.equal(200);
@@ -81,37 +65,67 @@ describe('Gallery Routes', function() {
           expect(res.body.desc).to.equal(exampleGallery.desc);
           expect(res.body.userID).to.equal(this.tempUser._id.toString());
           expect(date).to.not.equal('Invalid Date');
+          done();
+        });
+      });
+    });
+
+    describe('with no token provided', () => {
+      it('should respond with a 401 code', done => {
+        request.post(`${url}/api/gallery`)
+        .send(exampleGallery)
+        .end( (err, res) => {
+          expect(res.status).to.equal(401);
+          done();
+        });
+      });
+    });
+
+    describe('with a bad body', () => {
+      it('should respond with a 400 code', done => {
+        request.post(`${url}/api/gallery`)
+        .send('bad body')
+        .set({
+          Authorization: `Bearer ${this.tempToken}`,
         })
-        .catch(Promise.reject);
+        .end( (err, res) => {
+          expect(res.status).to.equal(400);
+          done();
+        });
       });
     });
   });
 
   describe('GET /api/gallery/:id', () => {
-    beforeEach( () => {
-      console.log('tempToken:', this.tempToken);
-      console.log('tempUser:', this.tempUser);
+    beforeEach( done => {
       exampleGallery.userID = this.tempUser._id.toString();
-      return new Gallery(exampleGallery).save()
+      new Gallery(exampleGallery).save()
       .then( gallery => {
         this.tempGallery = gallery;
-        return Promise.resolve();
+        done();
       })
-      .catch(Promise.reject);
+      .catch(done);
     });
 
     afterEach( () => delete exampleGallery.userID);
 
     describe('with a valid id', () => {
-      it('should return a gallery', () => {
-        return request.get(`${url}/api/gallery/${this.tempGallery._id}`)
+      it('should return a gallery', done => {
+        request.get(`${url}/api/gallery/${this.tempGallery._id}`)
         .set({
           Authorization: `Bearer ${this.tempToken}`,
         })
-        .then( res => {
+        .end( (err,res) => {
+          if (err) done(err);
+          let date = new Date(res.body.created).toString();
+
           expect(res.status).to.equal(200);
-        })
-        .catch(Promise.reject);
+          expect(res.body.name).to.equal(exampleGallery.name);
+          expect(res.body.desc).to.equal(exampleGallery.desc);
+          expect(res.body.userID).to.equal(this.tempUser._id.toString());
+          expect(date).to.not.equal('Invalid Date');
+          done();
+        });
       });
     });
   });
