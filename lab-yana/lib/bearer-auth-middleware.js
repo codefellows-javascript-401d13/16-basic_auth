@@ -12,6 +12,7 @@ module.exports = function(req, res, next) {
   if (!authHeader) return next(createError(401, 'authorization header required'));
 
   let token = authHeader.split('Bearer ')[1];
+  console.log('TOKEN!!!!!!!!!!!', token);
   if(!token) return next(createError(401, 'token required'));
 
   jwt.verify(token, process.env.APP_SECRET, (err, decoded) => {

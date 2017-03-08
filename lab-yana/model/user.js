@@ -12,8 +12,8 @@ const Schema = mongoose.Schema;
 
 const userSchema = Schema({
   username: { type: String, required: true, unique: true  },
+  email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  email: { type: String, unique: true, required: true },
   findHash: { type: String, unique: true }
 });
 
@@ -53,7 +53,7 @@ userSchema.methods.generateFindHash = function() {
         tries++;
         _generateFindHash.call(this); //try to generate the FindHash again until it has been tried 3 times
       });
-    }
+    };
   });
 };
 

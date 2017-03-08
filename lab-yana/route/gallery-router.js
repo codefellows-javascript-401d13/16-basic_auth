@@ -11,7 +11,6 @@ const galleryRouter = module.exports = Router();
 
 galleryRouter.get('/api/gallery/:id', bearerAuth, function(req, res, next) {
   debug('GET: /api/gallery/:id');
-
   Gallery.findById(req.params.id)
   .then(gallery => {
     if (gallery.userID.toString() !== req.user._id.toString()) return next(createError(401, 'invalid user')); //check that the user is trying to access their own gallery
@@ -31,6 +30,7 @@ galleryRouter.get('/api/gallery', bearerAuth, function(req, res, next) {
 
 galleryRouter.post('/api/gallery', bearerAuth, parseJSON, function(req, res, next) {
   debug('POST: /api/gallery');
+  console.log('BEARERAUTH', bearerAuth);
 
   req.body.userID = req.user._id; //associate the user with the gallery before creating the new gallery and saving it to the db
   new Gallery(req.body).save()
