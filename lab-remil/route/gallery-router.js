@@ -29,3 +29,20 @@ galleryRouter.get('/api/gallery/:id', bearerAuth, function(req, res, next) {
   })
   .catch(next);
 });
+
+galleryRouter.put('/api/gallery/:id', bearerAuth, jsonParser, function(req, res, next) {
+  debug('PUT: /api/gallery/:id');
+
+  Gallery.findById(req.params.id)
+  .then( gallery => {
+    if (gallery.userID.toString() !== req.user._id.toString()) return next(createError(401, 'invalid user'));
+
+    return gallery;
+  })
+  .then( gallery => {
+    Gallery.findByIdAndUpdate(gallery._id, req.body, { new: true})
+    .then( gallery => res.json(gallery))
+    .catch(next);
+  })
+  .catch(next);
+});

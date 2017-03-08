@@ -152,4 +152,45 @@ describe('Gallery Routes', function() {
       });
     });
   });
+
+  describe('PUT: /api/gallery/:id', () => {
+    let updatedGallery = {
+      name: 'New Gallery',
+      desc: 'new gallery description',
+    };
+
+    beforeEach( done => {
+      exampleGallery.userID = this.tempUser._id.toString();
+      new Gallery(exampleGallery).save()
+      .then( gallery => {
+        this.tempGallery = gallery;
+        done();
+      })
+      .catch(done);
+    });
+
+    afterEach( () => delete exampleGallery.userID);
+
+    describe('with a valid id and body', () => {
+      it('should return a gallery', done => {
+        request.put(`${url}/api/gallery/${this.tempGallery._id}`)
+        .send(updatedGallery)
+        .set({
+          Authorization: `Bearer ${this.tempToken}`,
+        })
+        .end( (err,res) => {
+          if (err) done(err);
+          let date = new Date(res.body.created).toString();
+
+          expect(res.status).to.equal(200);
+          expect(res.body._id.toString()).to.equal(this.tempGallery._id.toString());
+          expect(res.body.name).to.equal(updatedGallery.name);
+          expect(res.body.desc).to.equal(updatedGallery.desc);
+          expect(res.body.userID).to.equal(this.tempUser._id.toString());
+          expect(date).to.not.equal('Invalid Date');
+          done();
+        });
+      });
+    });
+  });
 });
