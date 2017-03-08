@@ -18,6 +18,14 @@ galleryRouter.post('/api/gallery', bearerAuth, jsonParser, function(req, res, ne
   .catch(next);
 });
 
+galleryRouter.get('/api/gallery/', bearerAuth, function(req, res, next) {
+  debug('GET: /api/gallery/');
+
+  Gallery.find({ userID: req.user._id.toString() })
+  .then( galleries => res.json(galleries))
+  .catch(next);
+});
+
 galleryRouter.get('/api/gallery/:id', bearerAuth, function(req, res, next) {
   debug('GET: /api/gallery/:id');
 

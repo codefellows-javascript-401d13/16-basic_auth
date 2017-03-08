@@ -96,6 +96,55 @@ describe('Gallery Routes', function() {
     });
   });
 
+  describe('GET /api/gallery', () => {
+    let secondGallery = {
+      name: 'Second Galley',
+      desc: 'second gallery description',
+    };
+
+    beforeEach( done => {
+      exampleGallery.userID = this.tempUser._id.toString();
+      secondGallery.userID = this.tempUser._id.toString();
+
+      let promGalleryOne = new Gallery(exampleGallery).save()
+      .then( gallery => {
+        this.tempGallery = gallery;
+        return Promise.resolve;
+      })
+      .catch(Promise.reject);
+      let promGalleryTwo = new Gallery(secondGallery).save()
+      .then( gallery => {
+        this.tempGallery = gallery;
+        return Promise.resolve;
+      })
+      .catch(Promise.reject);
+
+      Promise.all([ promGalleryOne, promGalleryTwo])
+      .then( () => done())
+      .catch(done);
+    });
+
+    afterEach( () => delete exampleGallery.userID);
+
+    describe('with a valid user token', () => {
+      it('should return an array of that user\'s galleries', done => {
+        request.get(`${url}/api/gallery`)
+        .set({
+          Authorization: `Bearer ${this.tempToken}`,
+        })
+        .end( (err,res) => {
+          if (err) done(err);
+          expect(res.status).to.equal(200);
+          expect(res.body).to.be.an('array');
+          expect(res.body.length).to.equal(2);
+          expect(res.body[0].userID).to.equal(res.body[1].userID);
+          done();
+        });
+      });
+    });
+  });
+
+
   describe('GET /api/gallery/:id', () => {
     beforeEach( done => {
       exampleGallery.userID = this.tempUser._id.toString();
@@ -259,9 +308,10 @@ describe('Gallery Routes', function() {
         });
       });
     });
+
     describe('with no token provided', () => {
       it('should respond with a 401 code', done => {
-        request.get(`${url}/api/gallery/${this.tempGallery._id}`)
+        request.delete(`${url}/api/gallery/${this.tempGallery._id}`)
         .end( (err, res) => {
           expect(res.status).to.equal(401);
           done();
@@ -271,7 +321,7 @@ describe('Gallery Routes', function() {
 
     describe(' with a valid request with an id that was not found', () => {
       it('should respond with a 404 code', done => {
-        request.get(`${url}/api/gallery/invalidID`)
+        request.delete(`${url}/api/gallery/invalidID`)
         .set({
           Authorization: `Bearer ${this.tempToken}`,
         })
