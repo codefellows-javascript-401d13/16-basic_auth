@@ -48,3 +48,15 @@ galleryRouter.put('/api/gallery/:id', bearerAuth, jsonParser, function(req, res,
   })
   .catch(next);
 });
+
+galleryRouter.delete('/api/gallery/:id', bearerAuth, function(req, res, next) {
+  debug('DELETE: /api/gallery/:id');
+
+  Gallery.findByIdAndRemove(req.params.id)
+  .then( gallery => {
+    if (gallery.userID.toString() !== req.user._id.toString()) return next(createError(401, 'invalid user'));
+
+    res.sendStatus(204);
+  })
+  .catch(next);
+});

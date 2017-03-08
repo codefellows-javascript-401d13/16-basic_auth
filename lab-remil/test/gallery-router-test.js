@@ -231,7 +231,34 @@ describe('Gallery Routes', function() {
         });
       });
     });
-
-
   });
+
+  describe('DELETE: /api/gallery/:id', () => {
+    beforeEach( done => {
+      exampleGallery.userID = this.tempUser._id.toString();
+      new Gallery(exampleGallery).save()
+      .then( gallery => {
+        this.tempGallery = gallery;
+        done();
+      })
+      .catch(done);
+    });
+
+    afterEach( () => delete exampleGallery.userID);
+
+    describe('with a valid id', () => {
+      it('should return a 204 code', done => {
+        request.delete(`${url}/api/gallery/${this.tempGallery._id}`)
+        .set({
+          Authorization: `Bearer ${this.tempToken}`,
+        })
+        .end( (err,res) => {
+          if (err) done(err);
+          expect(res.status).to.equal(204);
+          done();
+        });
+      });
+    });
+  });
+
 });
