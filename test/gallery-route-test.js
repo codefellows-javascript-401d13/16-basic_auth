@@ -260,6 +260,21 @@ describe('Gallery Routes', function() {
         });
       });
     });
+
+    describe('with an undefined ID', () => {
+      it('should return a 404 error', done => {
+        let fakeID = '111222333444555666777888';
+        request.put(`${url}/api/gallery/${fakeID}`)
+        .set({
+          Authorization: `Bearer ${this.tempToken}`
+        })
+        .end((err, res) => {
+          expect(res.status).to.equal(404);
+          expect(res.status).to.equal(err.status);
+          done();
+        });
+      });
+    });
   });
 
   describe('DELETE: /api/gallery/:id', function() {
