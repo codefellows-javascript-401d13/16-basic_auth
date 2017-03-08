@@ -52,17 +52,20 @@ describe('Pic routers', function(){
         .generatePasswordHash(exampleUser.password)
         .then(user => user.save())
         .then(user => {
+          debug('out of passwordHash');
           this.tempUser = user;
-          return user.generateToken;
+          return user.generateToken();
         })
         .then(token => {
+          debug('about to make a token');
           this.tempToken = token;
           done();
         })
         .catch(done);
       });
       before(done => {
-        exampleGallery.userId = this.tempUser._id.toString();
+        exampleGallery.userID = this.tempUser._id.toString();
+        debug('about to gallery');
         new Gallery(exampleGallery).save()
         .then(gallery => {
           this.tempGallery = gallery;
