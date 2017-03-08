@@ -14,10 +14,11 @@ const errors = require('./lib/error-middleware.js');
 
 dotenv.load();
 
+mongoose.Promise = Promise;
+mongoose.connect(process.env.MONGODB_URI);
+
 const PORT = process.env.PORT || 3000;
 const app = express();
-
-mongoose.connect(process.env.MONGODB_URI);
 
 app.use(cors());
 app.use(morgan('dev'));
