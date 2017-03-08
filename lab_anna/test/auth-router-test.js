@@ -71,22 +71,6 @@ describe('Auth Routes', function() {
           done();
         });
       });
-
-      it('should return 401 status - no token provided', done => {
-        request.get(`${url}/api/signin`)
-        .end((err, res) => {
-          expect(res.status).to.equal(401);
-          done();
-        });
-      });
-
-      it('should return 404 status if no id', done => {
-        request.get(`${url}/api/gallery`)
-        .end((err, res) => {
-          expect(res.status).to.equal(404);
-          done();
-        });
-      });
     });
   });
 });
