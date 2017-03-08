@@ -36,22 +36,22 @@ describe('Gallery Routes', function() {
   });
 
   describe('POST: /api/gallery', function() {
-    describe('with a valid body', () => {
-      before( done => {
-        new User(testUser)
-        .generatePasswordHash(testUser.password)
-        .then( user => user.save())
-        .then( user => {
-          this.tempUser = user;
-          return user.generateToken();
-        })
-        .then( token => {
-          this.tempToken = token;
-          done();
-        })
-        .catch(done);
-      });
+    beforeEach( done => {
+      new User(testUser)
+      .generatePasswordHash(testUser.password)
+      .then( user => user.save())
+      .then( user => {
+        this.tempUser = user;
+        return user.generateToken();
+      })
+      .then( token => {
+        this.tempToken = token;
+        done();
+      })
+      .catch(done);
+    });
 
+    describe('with a valid body', () => {
       it('should return a gallery', done => {
         request.post(`${url}/api/gallery`)
         .send(testGallery)
@@ -66,6 +66,47 @@ describe('Gallery Routes', function() {
           expect(res.body.desc).to.equal(testGallery.desc);
           expect(res.body.userID).to.equal(this.tempUser._id.toString());
           expect(date).to.not.equal('invalid date');
+          done();
+        });
+      });
+    });
+
+    describe('with a missing body', () => {
+      it('should return a 400 error', done => {
+        request.post(`${url}/api/gallery`)
+        .set({
+          Authorization: `Bearer ${this.tempToken}`
+        })
+        .end((err, res) => {
+          expect(err.status).to.equal(400);
+          expect(res.status).to.equal(err.status);
+          done();
+        });
+      });
+    });
+
+    describe('with an invalid body', () => {
+      it('should return a 400 error', done => {
+        request.post(`${url}/api/gallery`)
+        .set({
+          Authorization: `Bearer ${this.tempToken}`
+        })
+        .send({ name: true })
+        .end((err, res) => {
+          expect(err.status).to.equal(400);
+          expect(res.status).to.equal(err.status);
+          done();
+        });
+      });
+    });
+
+    describe('without a token', () => {
+      it('should return a 401 error', done => {
+        request.post(`${url}/api/gallery`)
+        .send(testGallery)
+        .end((err, res) => {
+          expect(err.status).to.equal(401);
+          expect(res.status).to.equal(err.status);
           done();
         });
       });
@@ -206,7 +247,6 @@ describe('Gallery Routes', function() {
         })
         .end((err, res) => {
           if (err) return done(err);
-          console.log('res:', res);
           expect(res.status).to.equal(204);
           done();
         });
