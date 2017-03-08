@@ -1,5 +1,8 @@
 'use strict';
 
+//PURPOSE OF THIS PAGE: signup and sign in//
+
+
 const crypto = require('crypto');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');

@@ -5,6 +5,9 @@
 #ignore data files
 data/
 
+#ignore tokens
+.env/
+
 ### Node ###
 # Logs
 logs
