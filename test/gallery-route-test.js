@@ -160,6 +160,32 @@ describe('Gallery Routes', function() {
         });
       });
     });
+
+    describe('without token', () => {
+      it('should return a 401 error', done => {
+        request.get(`${url}/api/gallery/${this.tempGallery._id}`)
+        .end((err, res) => {
+          expect(res.status).to.equal(401);
+          expect(err.status).to.equal(res.status);
+          done();
+        });
+      });
+    });
+
+    describe('with an unrecognized id', () => {
+      it('should return a 404 error', done => {
+        let fakeID = '111222333444555666777888';
+        request.get(`${url}/api/gallery/${fakeID}`)
+        .set({
+          Authorization: `Bearer ${this.tempToken}`
+        })
+        .end((err, res) => {
+          expect(res.status).to.equal(404);
+          expect(err.status).to.equal(res.status);
+          done();
+        });
+      });
+    });
   });
 
   describe('PUT: /api/gallery/:id', function() {
