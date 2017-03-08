@@ -9,6 +9,7 @@ const mongoose = require('mongoose');
 
 const errors = require('./lib/error-middleware.js');
 const galleryRouter = require('./route/gallery-router.js');
+const picRouter = require('./route/pic-router.js');
 const authRouter = require('./route/auth-router.js');
 
 dotenv.load();
@@ -22,8 +23,11 @@ app.use(cors());
 app.use(morgan('dev'));
 app.use(authRouter);
 app.use(galleryRouter);
+app.use(picRouter);
 app.use(errors);
 
-app.listen(PORT, () => {
+const server = module.exports = app.listen(PORT, () => {
   debug(`Server's up on PORT: ${PORT}`);
 });
+
+server.isRunning = true;
