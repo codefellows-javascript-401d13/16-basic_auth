@@ -38,7 +38,8 @@ galleryRouter.put('/api/gallery/:id', bearerAuth, jsonParser, function(req, res,
 
   Gallery.findByIdAndUpdate(req.params.id, req.body, { new: true })
   .then( gallery => {
-    console.log('gallery:', gallery);
+    let reqKeys = Object.keys(req.body);
+    if (!gallery[reqKeys]) return next(createError(400, 'bad request'));
     res.json(gallery);
   })
   .catch(next);

@@ -224,11 +224,38 @@ describe('Gallery Routes', function() {
         .set({
           Authorization: `Bearer ${this.tempToken}`
         })
-        .send( { name: 'update test'} )
+        .send({ name: 'update test'})
         .end((err, res) => {
           if (err) return done(err);
           expect(res.status).to.equal(200);
           expect(res.body.name).to.equal('update test');
+          done();
+        });
+      });
+    });
+
+    describe('with no token provided', () => {
+      it('should return a 401 error', done => {
+        request.put(`${url}/api/gallery/${this.tempGallery._id}`)
+        .send({ name: 'update test'})
+        .end((err, res) => {
+          expect(res.status).to.equal(401);
+          expect(err.status).to.equal(res.status);
+          done();
+        });
+      });
+    });
+
+    describe('with an invalid body', () => {
+      it('should return a 400 error', done => {
+        request.put(`${url}/api/gallery/${this.tempGallery._id}`)
+        .set({
+          Authorization: `Bearer ${this.tempToken}`
+        })
+        .send({ not: 'valid' })
+        .end((err, res) => {
+          expect(res.status).to.equal(400);
+          expect(err.status).to.equal(res.status);
           done();
         });
       });
