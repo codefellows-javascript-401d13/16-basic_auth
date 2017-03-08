@@ -14,7 +14,7 @@ const userSchema = Schema({
   username: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  findHash: { type: String, unque: true }
+  findHash: { type: String, unqiue: true }
 });
 
 userSchema.methods.generatePasswordHash = function(password) {
