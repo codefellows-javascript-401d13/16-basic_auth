@@ -218,6 +218,20 @@ describe('Gallery Routes', function() {
       });
     });
 
+    describe('with a bad body', () => {
+      it('should return a 400 code', done => {
+        request.put(`${url}/api/gallery/badID`)
+        .send(updatedGallery)
+        .set({
+          Authorization: `Bearer ${this.tempToken}`,
+        })
+        .end( (err,res) => {
+          expect(res.status).to.equal(404);
+          done();
+        });
+      });
+    });
+
 
   });
 });
