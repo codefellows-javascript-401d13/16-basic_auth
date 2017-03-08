@@ -31,3 +31,11 @@ galleryRouter.get('/api/gallery/:id', bearerAuth, function(req, res, next) {
   })
   .catch(next);
 });
+
+galleryRouter.put('/api/gallery/:id', bearerAuth, jsonParser, function(req, res, next) {
+  debug('PUT: /api/gallery');
+
+  Gallery.findByIdAndUpdate(req.params.id, req.body, { new: true })
+  .then( gallery => res.json(gallery))
+  .catch(next);
+});

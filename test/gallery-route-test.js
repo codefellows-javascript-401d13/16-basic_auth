@@ -98,7 +98,7 @@ describe('Gallery Routes', function() {
       .catch(done);
     });
 
-    after( () => {
+    afterEach( () => {
       delete testGallery.userID;
     });
 
@@ -115,6 +115,53 @@ describe('Gallery Routes', function() {
           expect(res.body.desc).to.equal(testGallery.desc);
           expect(res.body.userID).to.equal(this.tempUser._id.toString());
           expect(date).to.not.equal('Invalid Date');
+          done();
+        });
+      });
+    });
+  });
+
+  describe('PUT: /api/gallery/:id', function() {
+    beforeEach( done => {
+      new User(testUser)
+      .generatePasswordHash(testUser.password)
+      .then( user => user.save())
+      .then( user => {
+        this.tempUser = user;
+        return user.generateToken();
+      })
+      .then( token => {
+        this.tempToken = token;
+        done();
+      })
+      .catch(done);
+    });
+
+    beforeEach( done => {
+      testGallery.userID = this.tempUser._id.toString();
+      new Gallery(testGallery).save()
+      .then( gallery => {
+        this.tempGallery = gallery;
+        done();
+      })
+      .catch(done);
+    });
+
+    afterEach( () => {
+      delete testGallery.userID;
+    });
+
+    describe('with a valid id and request', () => {
+      it('should return an updated gallery', done => {
+        request.put(`${url}/api/gallery/${this.tempGallery._id}`)
+        .set({
+          Authorization: `Bearer ${this.tempToken}`
+        })
+        .send( { name: 'update test'} )
+        .end((err, res) => {
+          if (err) return done(err);
+          expect(res.status).to.equal(200);
+          expect(res.body.name).to.equal('update test');
           done();
         });
       });
