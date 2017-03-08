@@ -192,5 +192,32 @@ describe('Gallery Routes', function() {
         });
       });
     });
+
+    describe('with no token provided', () => {
+      it('should return a 401 code', done => {
+        request.put(`${url}/api/gallery/${this.tempGallery._id}`)
+        .send(updatedGallery)
+        .end( (err,res) => {
+          expect(res.status).to.equal(401);
+          done();
+        });
+      });
+    });
+
+    describe('with a bad body', () => {
+      it('should return a 400 code', done => {
+        request.put(`${url}/api/gallery/${this.tempGallery._id}`)
+        .send('bad body')
+        .set({
+          Authorization: `Bearer ${this.tempToken}`,
+        })
+        .end( (err,res) => {
+          expect(res.status).to.equal(400);
+          done();
+        });
+      });
+    });
+
+
   });
 });
