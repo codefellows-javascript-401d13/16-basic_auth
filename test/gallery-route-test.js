@@ -167,4 +167,50 @@ describe('Gallery Routes', function() {
       });
     });
   });
+
+  describe('DELETE: /api/gallery/:id', function() {
+    beforeEach( done => {
+      new User(testUser)
+      .generatePasswordHash(testUser.password)
+      .then( user => user.save())
+      .then( user => {
+        this.tempUser = user;
+        return user.generateToken();
+      })
+      .then( token => {
+        this.tempToken = token;
+        done();
+      })
+      .catch(done);
+    });
+
+    beforeEach( done => {
+      testGallery.userID = this.tempUser._id.toString();
+      new Gallery(testGallery).save()
+      .then( gallery => {
+        this.tempGallery = gallery;
+        done();
+      })
+      .catch(done);
+    });
+
+    afterEach( () => {
+      delete testGallery.userID;
+    });
+
+    describe('with a valid id', () => {
+      it('should return a 204 message', done => {
+        request.delete(`${url}/api/gallery/${this.tempGallery._id}`)
+        .set({
+          Authorization: `Bearer ${this.tempToken}`
+        })
+        .end((err, res) => {
+          if (err) return done(err);
+          console.log('res:', res);
+          expect(res.status).to.equal(204);
+          done();
+        });
+      });
+    });
+  });
 });
