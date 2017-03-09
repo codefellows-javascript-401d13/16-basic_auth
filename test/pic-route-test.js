@@ -99,31 +99,4 @@ describe('Pic Routes', function() {
       });
     });
   });
-
-  describe('DELETE: /api/gallery/:galleryID/pic', function() {
-    beforeEach( done => {
-      new User(exampleUser)
-      .generatePasswordHash(exampleUser.password)
-      .then( user => user.save())
-      .then( user => {
-        this.tempUser = user;
-        return user.generateToken();
-      })
-      .then( token => {
-        this.tempToken = token;
-        done();
-      })
-      .catch(done);
-    });
-
-    beforeEach( done => {
-      exampleGallery.userID = this.tempUser._id.toString();
-      new Gallery(exampleGallery).save()
-      .then( gallery => {
-        this.tempGallery = gallery;
-        done();
-      })
-      .catch(done);
-    });
-  });
 });
