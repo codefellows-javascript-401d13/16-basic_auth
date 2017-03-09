@@ -1,8 +1,13 @@
 'use strict';
 
+require('./lib/test-env.js');
+const AWS = require('aws-sdk-mock');
+
 const expect = require('chai').expect;
 const request = require('superagent');
 const debug = require('debug')('cfgram:pic-router-test');
+const awsMocks = require('./lib/aws-mocks.js');
+
 
 const Pic = require('../model/pic.js');
 const User = require('../model/user.js');
@@ -29,6 +34,7 @@ const examplePic = {
   desc: 'testing pic description',
   image: `${__dirname}/data/tester.png`
 };
+
 
 
 describe('Pic Routes', function() {
@@ -91,9 +97,11 @@ describe('Pic Routes', function() {
         .end((err, res) => {
           if(err) return done(err);
           expect(res.status).to.equal(200, 'upload worked');
+          console.log('location prop:', awsMocks.uploadMock.Location);
           expect(res.body.name).to.equal(examplePic.name);
           expect(res.body.desc).to.equal(examplePic.desc);
           expect(res.body.galleryID).to.equal(this.tempGallery._id.toString());
+          expect(res.body.imageURI).to.equal(awsMocks.uploadMock.Location);
           done();
         });
       });

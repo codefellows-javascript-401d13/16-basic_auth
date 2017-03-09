@@ -20,8 +20,11 @@ dotenv.load();
 
 mongoose.connect(process.env.MONGODB_URI);
 
+let morganFormat = process.env.PRODUCTION ? 'common' : 'dev';
+
 app.use(cors());
-app.use(morgan('dev'));
+app.use(morgan(morganFormat));
+
 
 app.use(authRouter);
 app.use(galleryRouter);
