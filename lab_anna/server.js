@@ -8,6 +8,7 @@ const mongoose = require('mongoose');
 const Promise = require('bluebird');
 const debug = require('debug')('cfgram:server');
 
+const picRouter = require('./route/pic-router.js');
 const authRouter = require('./route/auth-router.js');
 const galleryRouter = require('./route/gallery-router.js');
 const errors = require('./lib/error-middleware.js');
@@ -22,10 +23,13 @@ mongoose.connect(process.env.MONGODB_URI);
 app.use(cors());
 app.use(morgan('dev'));
 
+app.use(picRouter);
 app.use(authRouter);
 app.use(galleryRouter);
 app.use(errors);
 
-app.listen(PORT, () => {
-  console.log(`server up: ${PORT}`);
+const server = module.exports = app.listen(PORT, () => {
+  debug(`server up: ${PORT}`);
 });
+
+server.isRunning = true;
