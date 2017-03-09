@@ -98,4 +98,15 @@ describe('Pic Routes', function() {
       });
     });
   });
+
+  // describe('DELETE: /api/gallery/:galleryID/pic/:picID', () => {
+  //   beforeEach( done => {
+  //
+  //   });
+  //   describe('with a valid pic id', () => {
+  //     it('should return a 204 and remove the pic from S3', done => {
+  //
+  //     });
+  //   });
+  // });
 });
