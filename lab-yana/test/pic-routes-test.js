@@ -78,7 +78,6 @@ describe('Pic Routes', function() {
         .attach('image', testPic.image)
         .end((err, res) => {
           if (err) return done(err);
-          console.log('res.body', res.body);
           expect(res.body.name).to.equal(testPic.name);
           expect(res.body.desc).to.equal(testPic.desc);
           expect(res.body.galleryID).to.equal(this.tempGallery._id.toString());
@@ -124,7 +123,6 @@ describe('Pic Routes', function() {
   //       .end((err, res) => {
   //         if (err) return done(err);
   //         this.tempPic = res.body;
-  //         console.log('this.tempPic in before', this.tempPic)
   //         done();
   //       });
   //       done();
@@ -140,7 +138,6 @@ describe('Pic Routes', function() {
       //   }
       //   new Pic(picProps).save()
       //   .then(pic => {
-      //     console.log('PIC', pic);
       //     this.tempPic = pic;
       //     done();
       //   })
@@ -151,7 +148,6 @@ describe('Pic Routes', function() {
   //       .set( { Authorization: `Bearer ${this.tempToken}` } )
   //       .end((err, res) => {
   //         if (err) return done(err);
-  //         console.log('res body in it', res.body);
   //         expect(res.status).to.equal(204);
   //         done();
   //       });
