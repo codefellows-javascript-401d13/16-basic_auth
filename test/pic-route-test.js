@@ -5,7 +5,7 @@ require('./lib/test-env.js');
 const expect = require('chai').expect;
 const request = require('superagent');
 const debug = require('debug')('cfrgam:pic-route-test');
-const awsMocks = require('./lib/aws-mocks.js');
+const awsMocks = require('./lib/aws-mocks.js'); //eslint-disable-line
 const Pic = require('../model/pic.js');
 const User = require('../model/user.js');
 const Gallery = require('../model/gallery.js');
