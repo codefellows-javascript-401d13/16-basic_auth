@@ -24,7 +24,7 @@ const exampleGallery = {
 
 mongoose.Promise = Promise;
 
-// require('../server.js');
+require('../server.js');
 
 
 describe('Gallery Routes', function() {
@@ -168,7 +168,74 @@ describe('Gallery Routes', function() {
     });
   });
 
-  describe('PUT: /api/gallery', () => {
-
-  })
+  describe('PUT: /api/gallery', function() {
+    before( done => {
+      new User(exampleUser)
+      .generatePasswordHash(exampleUser.password)
+      .then( user => {
+        this.tempUser = user;
+        return user.generateToken();
+      })
+      .then( token => {
+        this.tempToken = token;
+        done();
+      })
+      .catch(done);
+    });
+    before( done => {
+      this.tempGallery = new Gallery(exampleGallery);
+      this.tempGallery.userID = this.tempUser._id;
+      this.tempGallery.save()
+      .then( gallery => {
+        this.tempGallery = gallery;
+        done();
+      })
+      .catch(done);
+    });
+    describe('with a valid token and a valid body', () => {
+      it('should return an updated gallery', done => {
+        request.put(`${url}/api/gallery/${this.tempGallery._id}`)
+        .set({
+          Authorization: `Bearer ${this.tempToken}`
+        })
+        .send({name: 'new name', desc: 'new desc'})
+        .end((err, res) => {
+          if(err) return done(err);
+          expect(res.status).to.equal(200);
+          expect(res.body.name).to.equal('new name');
+          expect(res.body.desc).to.equal('new desc');
+          expect(res.body.userID).to.equal(this.tempUser._id.toString());
+          done();
+        });
+      });
+    });
+    describe('with an invalid body', () => {
+      it('should return a 404', done => {
+        request.put(`${url}/api/gallery/${this.tempGallery._id}`)
+        .set({
+          Authorization: `Bearer ${this.tempToken}`
+        })
+        .send({broken: 'not valid'})
+        .end((err, res) => {
+          expect(err.message).to.equal('Bad Request');
+          expect(res.status).to.equal(400);
+          done();
+        });
+      });
+    });
+    describe('with an invalid gallery ID', () => {
+      it('should return a 404 ', done => {
+        request.put(`${url}/api/gallery/brokenID`)
+        .set({
+          Authorization: `Bearer ${this.tempToken}`
+        })
+        .send({name: 'no name update', desc: 'no desc update'})
+        .end((err, res) => {
+          expect(err.message).to.equal('Not Found');
+          expect(err.status).to.equal(404);
+          done();
+        });
+      });
+    });
+  });
 });
