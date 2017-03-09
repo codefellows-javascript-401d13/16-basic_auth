@@ -18,6 +18,8 @@ const PORT = process.env.PORT || 3000;
 mongoose.Promise = Promise;
 mongoose.connect(process.env.MONGODB_URI);
 
+let morganFormat = process.env.PRODUCTION ? 'common' : 'dev';
+
 const app = require('express')();
 
 app.use(cors());

@@ -1,5 +1,8 @@
 'use strict';
 
+require('./lib/test-env.js');
+const awsMocks = require('./lib/aws-mocks.js');
+
 const expect = require('chai').expect;
 const request = require('superagent');
 const Promise = require('bluebird');
@@ -93,6 +96,9 @@ describe('Pic Routes', function() {
           expect(res.body.name).to.equal(examplePic.name);
           expect(res.body.desc).to.equal(examplePic.desc);
           expect(res.body.galleryID).to.equal(this.tempGallery._id.toString());
+
+          console.log('AWS Mock:', awsMocks.uploadMock);
+          expect(res.body.imageURI).to.equal(awsMocks.uploadMock.Location);
           done();
         });
       });
