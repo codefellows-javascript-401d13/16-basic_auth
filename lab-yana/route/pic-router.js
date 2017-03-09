@@ -60,3 +60,19 @@ picRouter.post('/api/gallery/:galleryID/pic', bearerAuth, upload.single('image')
   .then(pic => res.json(pic))
   .catch(next);
 });
+
+// picRouter.delete('/api/gallery/:galleryID/pic/:picID', bearerAuth, function(req, res, next) {
+//   debug('DELETE: /api/gallery/:galleryID/pic/:picID');
+//
+//   Pic.findByIdAndRemove(req.params.picID)
+//   .then(res => {
+//     console.log('RES', res);
+//     let params = {
+//       Bucket: process.env.AWS_BUCKET,
+//       Key: res._id.toString()
+//     }
+//     s3.deleteObject(params);
+//     res.status(204).send();
+//   })
+//   .catch(next);
+// });
