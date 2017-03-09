@@ -9,6 +9,7 @@ const dotenv = require('dotenv');
 
 const authRouter = require('./route/auth-router.js');
 const galleryRouter = require('./route/gallery-router.js');
+const picRouter = require('./route/pic-router.js');
 const errors = require('./lib/error-middleware.js');
 
 dotenv.load();
@@ -24,7 +25,10 @@ app.use(morgan('dev'));
 
 app.use(authRouter);
 app.use(galleryRouter);
+app.use(picRouter);
 
 app.use(errors);
 
-app.listen(PORT, debug(`Servin' it up on >>>> ${PORT} <<<<`));
+const server = module.exports = app.listen(PORT, debug(`Servin' it up on >>>> ${PORT} <<<<`));
+
+server.isRunning = true;
