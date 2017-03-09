@@ -52,7 +52,7 @@ jspm_packages
 # Yarn Integrity file
 .yarn-integrity
 
-
+.env
 
 ### Vim ###
 # swap
@@ -126,3 +126,5 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+*.env
