@@ -9,7 +9,8 @@
   "scripts": {
     "start": "DEBUG='cfgram*' node server.js",
     "coveralls": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
-    "test": "DEBUG='cfgram*' ./node_modules/mocha/bin/mocha"
+    "test": "DEBUG='cfgram*' ./node_modules/mocha/bin/mocha",
+    "lint": "./node_modules/eslint/lib/eslint.js ."
   },
   "repository": {
     "type": "git",

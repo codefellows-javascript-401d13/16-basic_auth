@@ -2,7 +2,7 @@
 
 
 require('./lib/test-env.js');
-const awsMocks = require('./lib/aws-mocks.js');
+const awsMocks = require('./lib/aws-mocks.js'); //eslint-disable-line
 const expect = require('chai').expect;
 const request = require('superagent');
 const mongoose = require('mongoose');
@@ -21,42 +21,7 @@ const exampleUser = {
   password: 'awesome',
   email: 'exampleuser@test.com'
 };
-// MY CODE Pasting In Class code to see if issue is with this file.
-// describe('Auth Routes!', function(){
-//   describe('POST /api/signup', function(){
-//     describe('with a valid body', function(){
-//       after(done => {
-//         User.remove({})
-//         .then(() => done())
-//         .catch(done);
-//       });
-//       it('should return a user', done => {
-//         request.post(`${url}/api/signup`)
-//         .send(exampleUser)
-//         .end((err, res) => {
-//           if(err) return done(err);
-//           expect(res.status).to.equal(200);
-//           expect(res.text).to.be.a('string');
-//           done();
-//         });
-//       });
-//     });
-//     describe('with an invalid body', function(){
-//       after(done => {
-//         User.remove({})
-//         .then(() => done())
-//         .catch(done);
-//       });
-//       it('should return a 400', done => {
-//         request.post(`${url}/api/signup`)
-//         .end((err, res) => {
-//           expect(res.status).to.equal(400);
-//           done();
-//         });
-//       });
-//     });
-//   });
-// });
+
 
 describe('Auth Routes', function() {
   describe('POST: /api/signup', function() {
