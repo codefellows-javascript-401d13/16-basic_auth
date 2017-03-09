@@ -56,10 +56,12 @@ describe('Pic Routes', function() {
         .then( user => user.save())
         .then( user => {
           this.tempUser = user;
+          console.log('tempUser', this.tempUser);
           return user.generateToken();
         })
         .then( token => {
           this.tempToken = token;
+          console.log('tempToken', this.tempToken);
           done();
         })
         .catch(done);
@@ -70,6 +72,7 @@ describe('Pic Routes', function() {
         new Gallery(exampleGallery).save()
         .then( gallery => {
           this.tempGallery = gallery;
+          console.log('tempGallery', this.tempGallery);
           done();
         })
         .catch(done);
@@ -87,7 +90,7 @@ describe('Pic Routes', function() {
         })
         .field('name', examplePic.name)
         .field('desc', examplePic.desc)
-        .field('image', examplePic.image)
+        .attach('image', examplePic.image)
         .end((err, res) => {
           if (err) return done(err);
           expect(res.body.name).to.equal(examplePic.name);

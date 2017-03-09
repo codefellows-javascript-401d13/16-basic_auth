@@ -17,7 +17,7 @@ AWS.config.setPromisesDependency(require('bluebird'));
 
 const s3 = new AWS.S3();
 const dataDir = `${__dirname}/../data`;
-const upload = multer({ dest: datadir });
+const upload = multer({ dest: dataDir });
 
 const picRouter = module.exports = Router();
 
@@ -33,7 +33,8 @@ function s3uploadProm(params) {
 
 picRouter.post('/api/gallery/:galleryID/pic', bearerAuth, upload.single('image'), function(req, res, next) {
   debug('POST: /api/gallery/:galleryID/pic');
-
+  console.log('request file', req.file);
+  console.log('req params', req.params);
   if (!req.file) {
     return next(createError(400, 'file not found'));
   }
@@ -57,7 +58,7 @@ picRouter.post('/api/gallery/:galleryID/pic', bearerAuth, upload.single('image')
     del([`${dataDir}/*`]);
     let picData = {
       name: req.body.name,
-      decs: req.body.desc,
+      desc: req.body.desc,
       objectKey: s3data.Key,
       imageURI: s3data.Location,
       userID: req.user._id,
