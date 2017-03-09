@@ -15,7 +15,7 @@ const Router = require('express').Router;
 
 AWS.config.setPromisesDependency(require('bluebird'));
 const s3 = new AWS.S3();
-const picDir = `${__dirname}/data`;
+const picDir = `${__dirname}/../data`;
 const upload = multer( { dest: picDir } );
 
 const picRouter = module.exports = Router();
@@ -30,16 +30,15 @@ function s3uploadProm(params) {
   });
 }
 
-picRouter.post('/api/gallery/:galleryID/pic', bearerAuth, function(req, res, next) {
+picRouter.post('/api/gallery/:galleryID/pic', bearerAuth, upload.single('image'), function(req, res, next) {
   debug('POST: /api/gallery/:galleryID/pic');
-
   if (!req.file) return next(createError(400, 'file not found'));
   if (!req.file.path) return next(createError(500, 'file not saved'));
 
   let fileExt = path.extname(req.file.originalname);
   let params = {
     ACL: 'public-read',
-    Bucket: process.env.AWS_Bucket,
+    Bucket: process.env.AWS_BUCKET,
     Key: `${req.file.filename}${fileExt}`,
     Body: fs.createReadStream(req.file.path)
   };
@@ -56,8 +55,8 @@ picRouter.post('/api/gallery/:galleryID/pic', bearerAuth, function(req, res, nex
       galleryID: req.params.galleryID,
       userID: req.user._id
     };
-    return new Pic(picData);
+    return new Pic(picData).save();
   })
-  .then(pic => res.json())
+  .then(pic => res.json(pic))
   .catch(next);
 });

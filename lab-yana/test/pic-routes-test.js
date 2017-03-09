@@ -41,6 +41,7 @@ describe('Pic Routes', function() {
   });
   describe('POST: /api/gallery/:galleryID/pic', function() {
     describe('with a valid body', function () {
+
       before(done => {
         new User(testUser)
         .generatePasswordHash(testUser.password)
@@ -55,21 +56,24 @@ describe('Pic Routes', function() {
         })
         .catch(done);
       });
+
       before(done => {
-        testGallery.userID = this.tempUser._id;
-        new Gallery(testGallery)
+        testGallery.userID = this.tempUser._id.toString();
+        new Gallery(testGallery).save()
         .then(gallery => {
           this.tempGallery = gallery;
           done();
         })
         .catch(done);
       });
+
       after(done => {
         delete testGallery.userID;
         done();
       });
+
       it('should return a pic', done => {
-        request.post(`${url}/api/gallery/${this.tempGallery._id}/pic`)
+        request.post(`${url}/api/gallery/${this.tempGallery._id.toString()}/pic`)
         .set( { Authorization: `Bearer ${this.tempToken}` } )
         .field('name', testPic.name)
         .field('desc', testPic.desc)
