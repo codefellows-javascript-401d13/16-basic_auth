@@ -16,7 +16,7 @@ const bearerAuth = require('../lib/bearer-auth-middleware.js');
 AWS.config.setPromisesDependency(require('bluebird'));
 
 const s3 = new AWS.S3();
-const dataDir = `${_dirname}/../data`
+const dataDir = `${__dirname}/../data`
 const upload = multer({ dest: dataDir });
 
 const picRouter = module.exports = Router();
@@ -24,12 +24,13 @@ const picRouter = module.exports = Router();
 function s3uploadProm(params) {
   return new Promise((resolve, reject) => {
     s3.upload(params, (err, s3data) => {
+      console.log('ERRRRRRRRRRRRRRRRR', err);
       resolve(s3data);
     });
   });
 };
 
-picRouter.post('/api/gallery/:galleryID/pic', baererAuth, upload.single('image'), function(req, res, next) {
+picRouter.post('/api/gallery/:galleryID/pic', bearerAuth, upload.single('image'), function(req, res, next) {
   debug('POST /api/galllery/:galleryID/pic');
 
   if (!req.file) {
@@ -45,11 +46,11 @@ picRouter.post('/api/gallery/:galleryID/pic', baererAuth, upload.single('image')
   let params = {
     ACL: 'public-read',
     Bucket: process.env.AWS_BUCKET,
-    key: `${req.file.filename}${ext}`,
+    Key: `${req.file.filename}${ext}`,
     Body: fs.createReadStream(req.file.path)
   };
 
-  Gallery.findByID(req.params.galleryID)
+  Gallery.findById(req.params.galleryID)
   .then( () => s3uploadProm(params))
   .then( s3data => {
     del([`${dataDir}/*`]);
@@ -58,7 +59,11 @@ picRouter.post('/api/gallery/:galleryID/pic', baererAuth, upload.single('image')
       desc: req.body.desc,
       objectKey: s3data.Key,
       imageURI: s3data.Location,
-      userID:
-    }
+      userID: req.user.id,
+      galleryID: req.params.galleryID
+    };
+    return Pic(picData).save();
   })
-})
+  .then( pic => res.json(pic))
+  .catch( err => next(err));
+});
