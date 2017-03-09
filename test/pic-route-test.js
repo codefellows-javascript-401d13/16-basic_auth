@@ -56,12 +56,10 @@ describe('Pic Routes', function() {
         .then( user => user.save())
         .then( user => {
           this.tempUser = user;
-          console.log('tempUser', this.tempUser);
           return user.generateToken();
         })
         .then( token => {
           this.tempToken = token;
-          console.log('tempToken', this.tempToken);
           done();
         })
         .catch(done);
@@ -72,7 +70,6 @@ describe('Pic Routes', function() {
         new Gallery(exampleGallery).save()
         .then( gallery => {
           this.tempGallery = gallery;
-          console.log('tempGallery', this.tempGallery);
           done();
         })
         .catch(done);
@@ -93,12 +90,40 @@ describe('Pic Routes', function() {
         .attach('image', examplePic.image)
         .end((err, res) => {
           if (err) return done(err);
+          expect(res.status).to.equal(200);
           expect(res.body.name).to.equal(examplePic.name);
           expect(res.body.desc).to.equal(examplePic.desc);
           expect(res.body.galleryID).to.equal(this.tempGallery._id.toString());
           done();
         });
       });
+    });
+  });
+
+  describe('DELETE: /api/gallery/:galleryID/pic', function() {
+    beforeEach( done => {
+      new User(exampleUser)
+      .generatePasswordHash(exampleUser.password)
+      .then( user => user.save())
+      .then( user => {
+        this.tempUser = user;
+        return user.generateToken();
+      })
+      .then( token => {
+        this.tempToken = token;
+        done();
+      })
+      .catch(done);
+    });
+
+    beforeEach( done => {
+      exampleGallery.userID = this.tempUser._id.toString();
+      new Gallery(exampleGallery).save()
+      .then( gallery => {
+        this.tempGallery = gallery;
+        done();
+      })
+      .catch(done);
     });
   });
 });

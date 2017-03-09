@@ -33,8 +33,7 @@ function s3uploadProm(params) {
 
 picRouter.post('/api/gallery/:galleryID/pic', bearerAuth, upload.single('image'), function(req, res, next) {
   debug('POST: /api/gallery/:galleryID/pic');
-  console.log('request file', req.file);
-  console.log('req params', req.params);
+
   if (!req.file) {
     return next(createError(400, 'file not found'));
   }
