@@ -33,4 +33,4 @@ const server = module.exports = app.listen(PORT, () => {
   debug(`server is up: ${PORT}`);
 });
 
- server.isRunning = true;
+server.isRunning = true;
