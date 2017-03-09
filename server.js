@@ -12,7 +12,7 @@ const galleryRouter = require('./route/gallery-router.js');
 const picRouter = require('./route/pic-router.js');
 const errors = require('./lib/error-middleware.js');
 
-
+//cooool stuff
 
 const PORT = process.env.PORT || 3000;
 const app = express();
