@@ -1,7 +1,12 @@
 'use strict';
 
 require('./lib/test-env.js');
-require('./lib/aws-mocks.js');
+
+/* eslint-disable */
+
+const AWS = require('./lib/aws-mocks.js');
+
+/* eslint-enable */
 
 const expect = require('chai').expect;
 const request = require('superagent');

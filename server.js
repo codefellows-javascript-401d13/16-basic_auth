@@ -6,7 +6,6 @@ const morgan = require('morgan');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
-const Promise = require('bluebird');
 
 const errors = require('./lib/error-middleware.js');
 const galleryRouter = require('./route/gallery-router.js');
@@ -18,7 +17,6 @@ dotenv.load();
 const PORT = process.env.PORT || 3000;
 const app = express();
 
-mongoose.Promise = Promise;
 mongoose.connect(process.env.MONGODB_URI);
 
 let morganFormat = process.env.PRODUCTION ? 'common' : 'dev';

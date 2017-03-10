@@ -105,12 +105,11 @@ describe('Pic Routes', function() {
         .attach('image', examplePic.image)
         .end((err, res) => {
           if (err) return done(err);
-          console.log('location prop:', awsMocks.uploadMock.Location);
           expect(res.status).to.equal(200);
           expect(res.body.name).to.equal(examplePic.name);
           expect(res.body.desc).to.equal(examplePic.desc);
           expect(res.body.galleryID).to.equal(this.tempGallery._id.toString());
-          expect(res.body.imageURI).to.equal(awsMocks.uploadMock.location);
+          expect(res.body.imageURI).to.equal(awsMocks.uploadMock.Location);
           done();
         });
       });
