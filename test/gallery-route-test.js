@@ -153,6 +153,7 @@ describe('Gallery Routes', function(){
       .set({
         Authorization: `Bearer ${this.tempToken}`
       })
+      
       .end((err, res) => {
         if(err) return done(err);
         let date = new Date(res.body.created).toString();
