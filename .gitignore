@@ -89,7 +89,5 @@ typings/
 # dotenv environment variables file
 .env
 
-Test Data
-data/
 
 # End of https://www.gitignore.io/api/node,macos

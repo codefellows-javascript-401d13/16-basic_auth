@@ -8,6 +8,8 @@ const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 
 const errors = require('./lib/error-middleware.js');
+const galleryRouter = require('./route/gallery-router.js');
+const picRouter = require('./route/pic-router.js');
 const authRouter = require('./route/auth-router.js');
 
 dotenv.load();
@@ -17,11 +19,17 @@ const app = express();
 
 mongoose.connect(process.env.MONGODB_URI);
 
+let morganFormat = process.env.PRODUCTION ? 'common' : 'dev';
+
 app.use(cors());
-app.use(morgan('dev'));
+app.use(morgan(morganFormat));
 app.use(authRouter);
+app.use(galleryRouter);
+app.use(picRouter);
 app.use(errors);
 
-app.listen(PORT, () => {
+const server = module.exports = app.listen(PORT, () => {
   debug(`Server's up on PORT: ${PORT}`);
 });
+
+server.isRunning = true;
