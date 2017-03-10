@@ -24,4 +24,6 @@ Or to run the app use:
 ```
 $ npm start
 ```
-Current existing routes allow user to sign up and sign in using an unique username, a password of their choice (which is encrypted using bcrypt before storage) and an email. 
+Current existing routes allow user to sign up and sign in using an unique username, a password of their choice (which is encrypted using bcrypt before storage) and an email.
+
+Now with AWS S3 storage capabilities for uploading photos!
