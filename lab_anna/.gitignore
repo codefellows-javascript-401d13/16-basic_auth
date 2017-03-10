@@ -1,6 +1,6 @@
 # Created by https://www.gitignore.io/api/node,vim,osx,macos,linux
 
-*.env
+.env
 *node_modules
 
 ### Node ###
