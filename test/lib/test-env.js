@@ -1,6 +1,6 @@
 'use strict';
 
-// process.env.PORT='8000';
+process.env.PORT='8000';
 process.env.NODE_ENV='dev';
 process.env.MONGODB_URI='mongodb://localhost/testayogramdb';
 process.env.APP_SECRET='ayo';
