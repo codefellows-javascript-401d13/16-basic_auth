@@ -1,11 +1,14 @@
 'use strict';
 
+require('./lib/test-env.js');
+
 const expect = require('chai').expect;
 const request = require('superagent');
 
 const Pic = require('../model/pic.js');
 const User = require('../model/user.js');
 const Gallery = require('../model/gallery.js');
+const awsMocks = require('./lib/aws-mocks.js');
 
 const serverToggle = require('./lib/server-toggle.js');
 const server = require('../server.js');
@@ -28,6 +31,18 @@ const examplePic = {
   desc: 'example pic description',
   image: `${__dirname}/data/tester.png`
 };
+
+/* eslint-disable */
+
+const examplePicModel = {
+  name: 'example pic model',
+  desc: 'example pic model description',
+  imageURI: awsMocks.uploadMock.Location,
+  filename: awsMocks.uploadMock.Key,
+  created: new Date()
+};
+
+/* eslint-enable */
 
 describe('Pic Routes', function() {
   before( done => {
@@ -90,10 +105,12 @@ describe('Pic Routes', function() {
         .attach('image', examplePic.image)
         .end((err, res) => {
           if (err) return done(err);
+          console.log('location prop:', awsMocks.uploadMock.Location);
           expect(res.status).to.equal(200);
           expect(res.body.name).to.equal(examplePic.name);
           expect(res.body.desc).to.equal(examplePic.desc);
           expect(res.body.galleryID).to.equal(this.tempGallery._id.toString());
+          expect(res.body.imageURI).to.equal(awsMocks.uploadMock.location);
           done();
         });
       });
