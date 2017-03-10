@@ -21,24 +21,20 @@ const userSchema = Schema({
 userSchema.methods.generatePasswordHash = function(password) {
   debug('generatePasswordHash');
 
-  return new Promise((resolve, reject) => {
-    bcrypt.hash(password, 10, (err, hash) => {
-      if (err) return reject(err);
-      this.password = hash;
-      resolve(this);
-    });
+  return bcrypt.hash(password, 10)
+  .then( hash => {
+    this.password = hash;
+    return this;
   });
 };
 
 userSchema.methods.comparePasswordHash = function(password) {
   debug('comparePasswordHash');
 
-  return new Promise((resolve, reject) => {
-    bcrypt.compare(password, this.password, (err, valid) => {
-      if (err) return reject(err);
-      if (!valid) return reject(createError(401, 'wrong password'));
-      return resolve(this);
-    });
+  return bcrypt.compare(password, this.password)
+  .then( valid => {
+    if (!valid) return Promise.reject(createError(401, 'wrong password'));
+    return this;
   });
 };
 

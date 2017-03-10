@@ -1,5 +1,8 @@
 'use strict';
 
+require('./lib/test-env.js');
+const awsMocks = require('./lib/aws-mocks.js');
+
 const expect = require('chai').expect;
 const request = require('superagent');
 
@@ -64,7 +67,7 @@ describe('Auth Routes', function() {
       .then( () => done())
       .catch(done);
     });
-    
+
     describe('with valid user auth header', function() {
       it('should return a token', done => {
         request.get(`${url}/api/signin`)
