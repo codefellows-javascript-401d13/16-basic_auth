@@ -1,5 +1,5 @@
-'use strict';
 
+'use strict';
 const debug = require('debug')('ayogram:server');
 const Promise = require('bluebird');
 const cors = require('cors');
@@ -23,7 +23,7 @@ let morganFormat = process.env.PRODUCTION ? 'common' : 'dev';
 const app = require('express')();
 
 app.use(cors());
-app.use(morgan('dev'));
+app.use(morgan(morganFormat));
 
 app.use(authRouter);
 app.use(galleryRouter);

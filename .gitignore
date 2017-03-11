@@ -1,7 +1,7 @@
 # Created by https://www.gitignore.io/api/node,vim,osx,macos,linux
 
 ### My Custom Jams ###
-*.env
+.env
 .appnote
 
 *node_modules

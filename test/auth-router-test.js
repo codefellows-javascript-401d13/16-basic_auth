@@ -1,7 +1,7 @@
 'use strict';
 
 require('./lib/test-env.js');
-const awsMocks = require('./lib/aws-mocks.js');
+const awsMocks = require('./lib/aws-mocks.js');  //eslint-disable-line
 
 const expect = require('chai').expect;
 const request = require('superagent');
