@@ -9,7 +9,7 @@ exports.uploadMock = {
   Location: 'https://mockimageuri.com',
   Key: 'mockpic.png',
   key: 'mockpic.png',
-  Bucket: 'ayogram-test-bucket',
+  Bucket: 'test-bucket',
 };
 
 AWS.mock('S3', 'upload', function(params, callback) {
@@ -17,8 +17,8 @@ AWS.mock('S3', 'upload', function(params, callback) {
     return callback(new Error('ACL must be public-read'));
   }
 
-  if(!params.Bucket === 'ayogram-test-bucket') {
-    return callback(new Error('bucket must be ayogram-test-bucket'));
+  if(!params.Bucket === 'test-bucket') {
+    return callback(new Error('bucket must be test-bucket'));
   }
   if(!params.Key) {
     return callback(new Error('key required'));
