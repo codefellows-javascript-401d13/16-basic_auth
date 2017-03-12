@@ -39,8 +39,6 @@ describe('Auth Routes', function() {
         });
       });
     });
-  });
-
       describe('an invalid body', function() {
        it('should return a 400 error', done => {
        request.post(`${url}/api/signup`)
