@@ -50,7 +50,6 @@ describe('Auth Routes', function() {
       });
     });
 
-
   describe('GET: /api/signin', function() {
     describe('with a valid body', function() {
       before( done => {
@@ -78,6 +77,16 @@ describe('Auth Routes', function() {
           console.log('\nuser:', this.tempUser);
           console.log('\ntoken:', res.text);
           expect(res.status).to.equal(200);
+          done();
+        });
+      });
+    });
+    //GET 401 error
+    describe('invalid authentication header', function() {
+      it ('should return a 401 error', done => {
+        request.get(`${url}/api/signin`)
+        .end(err => {
+          expect(err.status).to.equal(400);
           done();
         });
       });
