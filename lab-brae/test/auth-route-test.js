@@ -4,6 +4,8 @@ const expect = require('chai').expect;
 const request = require('superagent');
 const mongoose = require('mongoose');
 const Promise = require('bluebird');
+const awsMocks = require('./lib/aws-mocks.js')
+
 const User = require('../model/user.js');
 
 mongoose.Promise = Promise;
