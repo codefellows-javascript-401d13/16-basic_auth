@@ -3,6 +3,7 @@
 const expect = require('chai').expect;
 const request = require('superagent');
 const debug = require('debug')('cfgram:pic-router-test');
+const awsMocks = require('./lib/aws-mocks.js');
 
 const Pic = require('../model/pic.js');
 const User = require('../model/user.js');
@@ -27,7 +28,15 @@ const exampleGallery = {
 const examplePic = {
     name: 'example pic',
     desc: 'example pic description',
-    image: `${__dirname}/data/tester.png`
+    image: `${__dirname}/data/tester.png`,
+};
+
+const examplePicModel = {
+    name: 'example model pic',
+    desc: 'example model pic description',
+    imageURI: awsMocks.uploadMock.Location,
+    filename: awsMocks.uploadMock.Key,
+    created: new Date()
 };
 
 describe('Pic Routes', function() {
@@ -94,6 +103,7 @@ describe('Pic Routes', function() {
                     expect(res.body.name).to.equal(examplePic.name);
                     expect(res.body.desc).to.equal(examplePic.desc);
                     expect(res.body.galleryID).to.equal(this.tempGallery._id.toString());
+                    expect(res.body.imageURI).to.equal(awsMocks.uploadMock.Location);
                     done();
                 });
             });

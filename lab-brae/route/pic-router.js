@@ -17,7 +17,7 @@ AWS.config.setPromisesDependency(require('bluebird'));
 
 const s3 = new AWS.S3();
 const dataDir = `${__dirname}/../data`;
-const upload = multer({ des: dataDir });
+const upload = multer({ dest: dataDir });
 
 const picRouter = module.exports = Router();
 

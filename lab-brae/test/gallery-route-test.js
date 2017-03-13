@@ -5,6 +5,7 @@ const request = require('superagent');
 const mongoose = require('mongoose');
 const Promise = require('bluebird');
 
+const awsMocks = require('./lib/aws-mocks.js');
 const User = require('../model/user.js');
 const Gallery = require('../model/gallery.js');
 

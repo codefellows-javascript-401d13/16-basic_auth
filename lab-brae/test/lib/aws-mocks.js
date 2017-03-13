@@ -25,7 +25,7 @@ AWS.mock('S3', 'upload', function(params, callback) {
         return callback(new Error('Key required'));
     };
 
-    if (!params.body) {
+    if (!params.Body) {
         return callback(new Error('Body required'));
     };
 
