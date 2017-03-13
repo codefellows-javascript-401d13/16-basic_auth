@@ -90,15 +90,15 @@ describe('Auth Routes', function() {
           done();
         });
       });
-   describe('invalid route', () => {
-     it('should return a 404 error', done => {
-       request.get(`${url}/api/epicfail`)
-       .end(err => {
-         expect(err.status).to.equal(404);
-         done();
-        });
-       });
-     });
+  //  describe('invalid route', () => {
+  //    it('should return a 404 error', done => {
+  //      request.get(`${url}/api/epicfail`)
+  //      .end(err => {
+  //        expect(err.status).to.equal(404);
+  //        done();
+  //       });
+  //      });
+  //    });
    });
   });
 });

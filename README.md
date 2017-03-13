@@ -1,28 +1,26 @@
 ![cf](https://i.imgur.com/7v5ASc8.png) Lab 16 - Basic Auth
 ======
 
-## To Submit this Assignment
+## Description
+  * Basic API Authentication with route tests
+
+## To Get this API working
   * fork this repository
-  * write all of your code in a directory named `lab-` + `<your name>` **e.g.** `lab-brian`
-  * push to your repository
-  * submit a pull request to this repository
-  * submit a link to your PR in canvas
+  * install npm
+  * In your terminal open a 2nd tab
+  * In the first tab run the command:
+  ```sh
+mongod
+```
+  * In the other tab run the command:
+  ```sh
+node server.js
+```
   * write a question and observation on canvas
 
-## Include
-  * `package.json`
-  * `.eslintrc`
-  * `gulpfile.js`
-  * `.gitignore`
-  * `.env`
-  * `README.md`
 
-## Description
-  * Create the following directories to organize your code:
-    * **lib**
-    * **model**
-    * **route**
-    * **test**
+
+
   * Create an HTTP server using `express`
   * Using `mongoose`, create a **User** model with the following properties and options:
     * `username` - *required and unique*
