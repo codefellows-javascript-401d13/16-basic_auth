@@ -237,7 +237,7 @@ describe('Gallery Routes', function() {
     });
 
     describe('PUT: /api/gallery/:id', () => {
-        describe('with an invalid body', function() {
+        describe('with a valid body', function() {
             before( done => {
                 new User(exampleUser)
                 .generatePasswordHash(exampleUser.password)
@@ -248,7 +248,7 @@ describe('Gallery Routes', function() {
                 })
                 .then( token => {
                     this.tempToken = token;
-                    done;
+                    done();
                 })
                 .catch(done);
             });
@@ -263,11 +263,7 @@ describe('Gallery Routes', function() {
                 .catch(done);
             });
 
-            after(() => {
-                delete exampleGallery.userID;
-            });
-
-            it('should return a PUT request with a valid body', done => {
+            it('it should return an updated gallery with a 200 status request', done => {
                 let newGallery = {
                     name: 'updated gallery',
                     desc: 'updated gallery description'
@@ -315,17 +311,67 @@ describe('Gallery Routes', function() {
                 .catch(done);
             });
 
-            it('should return a valid id', done => {
+            it('it should return a 404 status code', done => {
                 request.put(`${url}/api/nopath`)
                 .send({ 
-                    name: 'updated gallery', 
-                    desc: 'updated gallery description'
+                    name: 'new gallery', 
+                    desc: 'new gallery description'
                 })
                 .set({
                     Authorization: `Bearer ${this.tempToken}`
                 })
-                .send((err, res) => {
+                .end((err, res) => {
                     expect(res.status).to.equal(404);
+                    done();
+                });
+            });
+        });
+
+        describe('with an invalid body', () => {
+            before( done => {
+                new User(exampleUser)
+                .generatePasswordHash(exampleUser.password)
+                .then( user => user.save())
+                .then( user => {
+                    this.tempUser = user;
+                    return user.generateToken();
+                })
+                .then( token => {
+                    this.tempToken = token;
+                    done();
+                })
+                .catch(done);
+            });
+            
+            before( done => {
+                exampleGallery.userID = this.tempUser._id.toString();
+                new Gallery(exampleGallery).save()
+                .then( gallery => {
+                    this.tempGallery = gallery;
+                    done();
+                })
+                .catch(done);
+            });
+
+            it('should return a 400 status code', done => {
+                request.put(`${url}/api/gallery/${this.tempGallery._id}`)
+                .set({
+                    Authorization: `Bearer ${this.tempToken}`
+                })
+                .end((err, res) => {
+                    expect(res.status).to.equal(400);
+                    done();
+                });
+            });
+
+            it('should return a 401 error', done => {
+                request.put(`${url}/api/gallery/${this.tempGallery._id}`)
+                .send({
+                    name: 'updated gallery name',
+                    desc: 'updated gallery description'
+                })
+                .end((err, res) => {
+                    expect(res.status).to.equal(401);
                     done();
                 });
             });

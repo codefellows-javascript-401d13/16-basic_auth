@@ -8,6 +8,7 @@ module.exports = function(err, req, res, next) {
 
     console.error('msg:', err.message);
     console.error('name:', err.name);
+    console.error('status:', err.status);
 
     if (err.status) {
         res.status(err.status).send(err.name);
@@ -17,6 +18,13 @@ module.exports = function(err, req, res, next) {
 
     if (err.name === 'ValidationError') {
         err = createError(400, err.message);
+        res.status(err.status).send(err.name);
+        next();
+        return;
+    };
+
+    if (err.name === 'CastError') {
+        err = createError(404, err.message);
         res.status(err.status).send(err.name);
         next();
         return;

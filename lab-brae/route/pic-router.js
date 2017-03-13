@@ -66,3 +66,17 @@ picRouter.post('/api/gallery/:galleryID/pic', bearerAuth, upload.single('image')
     .then( pic => res.json(pic))
     .catch( err => next(err));
 });
+
+picRouter.delete('/api/gallery/:galleryID/pic', bearerAuth, function(req, res, next) {
+
+    let params = {
+        Bucket: process.env.AWS_BUCKET,
+        Key: req.params.imageID
+    };
+
+    s3.deleteObject(params);
+
+    Gallery.findByIdAndRemove(req.params.imageID)
+    .then( () => res.status(204).send())
+    .catch( err => next(createError(404, err.message)));
+});
