@@ -11,11 +11,15 @@ const authRouter= module.exports = Router();
 
 authRouter.post('/api/signup', jsonParser, function(req, res, next) {
   debug('POST: /api/signup');
+  // if(!req.body)
+  //need to check that it's an object and it's empty
+  //if returning an empty body- create new error- 400 empty
+  console.log('req.body', req.body);
 
   let password = req.body.password;
   delete req.body.password;
 
-  let user = new user(req.body);
+  let user = new User(req.body);
 
   user.generatePasswordHash(password)
   .then( user=> user.save())

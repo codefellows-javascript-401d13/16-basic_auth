@@ -6,6 +6,8 @@ const mongoose = require('mongoose');
 const Promise = require('bluebird');
 const User = require('../model/user.js');
 
+// const AuthRouter = require('../route/auth-router.js');
+
 mongoose.Promise = Promise;
 
 require('../server.js');
@@ -52,6 +54,8 @@ describe('Auth Routes', function() {
         });
       });
     });
+
+
       describe('an invalid body', function() {
        it('should return a 400 error', done => {
        request.post(`${url}/api/signup`)
