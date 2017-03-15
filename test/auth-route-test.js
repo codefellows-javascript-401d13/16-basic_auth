@@ -18,9 +18,22 @@ const exampleUser = {
   email: 'exampleuser@test.com'
 };
 
+//invalid route
+describe('invalid route', () => {
+  it('should return a 404 error', done => {
+    request.get(`${url}/api/epicfail`)
+    .end(err => {
+      expect(err.status).to.equal(404);
+      done();
+     });
+    });
+  });
+
+
 describe('Auth Routes', function() {
   describe('POST: /api/signup', function() {
-    describe('with a valid body', function() {
+    describe('with a valid body', () => {
+
       after( done => {
         User.remove({})
         .then( () => done())
@@ -82,23 +95,16 @@ describe('Auth Routes', function() {
       });
     });
     //GET 401 error
+
     describe('invalid authentication header', function() {
       it ('should return a 401 error', done => {
         request.get(`${url}/api/signin`)
         .end(err => {
-          expect(err.status).to.equal(400);
+          expect(err.status).to.equal(401);
           done();
         });
       });
-  //  describe('invalid route', () => {
-  //    it('should return a 404 error', done => {
-  //      request.get(`${url}/api/epicfail`)
-  //      .end(err => {
-  //        expect(err.status).to.equal(404);
-  //        done();
-  //       });
-  //      });
-  //    });
+
    });
   });
 });

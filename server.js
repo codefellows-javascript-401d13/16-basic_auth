@@ -8,6 +8,8 @@ const mongoose = require('mongoose');
 const Promise = require('bluebird');
 const debug = require('debug')('cfgram:server');
 
+const basicAuthRouter = require('./route/auth-router');
+
 dotenv.load();
 
 const PORT = process.env.PORT || 3000;
