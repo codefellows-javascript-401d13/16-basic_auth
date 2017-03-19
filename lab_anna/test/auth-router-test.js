@@ -31,31 +31,40 @@ describe('Auth Routes', function() {
     serverToggle.serverOff(server, done);
   });
 
-    describe('POST: /api/signup', function() {
-      after( done => {
-        User.remove({})
-        .then( () => done())
-        .catch(done);
-      });
-
-      describe('with a valid body', function() {
-        it('should return a token', done => {
-          request.post(`${url}/api/signup`)
-          .send(exampleUser)
-          .end((err, res) => {
-            if (err) return done(err);
-            console.log('\ntoken: ', res.text, '\n');
-            expect(res.status).to.equal(200);
-            expect(res.text).to.be.a('string');
-            done();
-          });
-        });
-      });
+  describe('POST: /api/signup', function() {
+    afterEach( done => {
+      User.remove({})
+      .then( () => done())
+      .catch(done);
     });
 
+    describe('Auth Post Route', function() {
+      it('should return a token', done => {
+        request.post(`${url}/api/signup`)
+        .send(exampleUser)
+        .end((err, res) => {
+          if (err) return done(err);
+          expect(res.status).to.equal(200);
+          expect(res.text).to.be.a('string');
+          done();
+        });
+      });
+
+      it('should return 400 status, bad request', done => {
+        request.post(`${url}/api/signup`)
+        .send('bad user')
+        .end((err, res) => {
+          expect(res.status).to.equal(400);
+          done();
+        });
+      });
+
+    });
+  });
+
   describe('GET: /api/signin', function() {
-    describe('with a valid body', function() {
-      before( done => {
+    describe('', function() {
+      beforeEach( done => {
         let user = new User(exampleUser);
         user.generatePasswordHash(exampleUser.password)
         .then( user => user.save())
@@ -66,7 +75,7 @@ describe('Auth Routes', function() {
         .catch(done);
       });
 
-      after( done => {
+      afterEach( done => {
         User.remove({})
         .then( () => done())
         .catch(done);
@@ -77,9 +86,16 @@ describe('Auth Routes', function() {
         .auth('exampleuser', '1234')
         .end((err, res) => {
           if (err) return done(err);
-          console.log('\nuser:', this.tempUser);
-          console.log('\ntoken:', res.text);
           expect(res.status).to.equal(200);
+          done();
+        });
+      });
+
+      it('should return 401 status, bad request', done => {
+        request.get(`${url}/api/signin`)
+        .auth('exampleuser')
+        .end((err, res) => {
+          expect(res.status).to.equal(401);
           done();
         });
       });

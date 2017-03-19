@@ -13,14 +13,14 @@ module.exports = function(err, req, res, next) {
     res.status(err.status).send(err.name);
     next();
     return;
-  };
+  }
 
   if (err.name === 'ValidationError') {
     err = createError(400, err.message);
     res.status(err.status).send(err.name);
     next();
     return;
-  };
+  }
 
   err = createError(500, err.message);
   res.status(err.status).send(err.name);

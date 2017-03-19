@@ -7,6 +7,7 @@ const request = require('superagent');
 const mongoose = require('mongoose');
 const serverToggle = require('./lib/server-toggle.js');
 const Promise = require('bluebird');
+const createError = require('http-errors');
 
 const User = require('../model/user.js');
 const Gallery = require('../model/gallery.js');
@@ -50,7 +51,7 @@ describe('Gallery Routes', function() {
       Gallery.remove({})
     ])
     .then( () => done())
-    .catch(done)
+    .catch(done);
   });
 
   describe('POST: /api/gallery', () => {
@@ -97,7 +98,7 @@ describe('Gallery Routes', function() {
       .end((err, res) => {
         expect(res.status).to.equal(400);
         done();
-      })
+      });
     });
 
     it('should return 401 status if no token', done => {
@@ -150,7 +151,7 @@ describe('Gallery Routes', function() {
         let date = new Date(res.body.created).toString();
         expect(res.body.name).to.equal(exampleGallery.name);
         expect(res.body.desc).to.equal(exampleGallery.desc);
-        expect(res.body.userID).to.equal(this.tempUser._id.toString())
+        expect(res.body.userID).to.equal(this.tempUser._id.toString());
         expect(date).to.not.equal('Invalid Date');
         done();
       });
@@ -210,7 +211,7 @@ describe('Gallery Routes', function() {
           .then( ()=> done())
           .catch(done);
           return;
-        };
+        }
         done();
       });
 
@@ -225,7 +226,7 @@ describe('Gallery Routes', function() {
           expect(res.status).to.equal(200);
           expect(res.body.name).to.equal(updatedGallery.name);
           expect(res.body.desc).to.equal(updatedGallery.desc);
-          expect(res.body.userID).to.equal(this.tempUser._id.toString())
+          expect(res.body.userID).to.equal(this.tempUser._id.toString());
           done();
         });
       });

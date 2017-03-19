@@ -24,7 +24,6 @@ const picRouter = module.exports = Router();
 function s3uploadProm(params) {
   return new Promise((resolve, reject) => {
     s3.upload(params, (err, s3data) => {
-      console.log('ERRRRRRRRRRRRRRRRR', err);
       resolve(s3data);
     });
   });
