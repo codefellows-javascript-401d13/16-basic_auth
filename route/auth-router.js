@@ -1,4 +1,3 @@
-
 'use strict';
 
 const jsonParser = require('body-parser').json();
